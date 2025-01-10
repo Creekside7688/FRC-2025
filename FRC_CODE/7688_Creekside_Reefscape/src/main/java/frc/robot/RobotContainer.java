@@ -12,6 +12,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
 
 import frc.lib.Controller;
+import frc.lib.FlightControl;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -27,9 +28,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  //private final SwerveDrive sd = new SwerveDrive();
+  private final SwerveDrive sd = new SwerveDrive();
   private final Controller controller = new Controller(1);
   private final Limelight cam =  new Limelight();
+  private final FlightControl flightcont = new FlightControl(1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -52,16 +54,16 @@ public class RobotContainer {
       new RunCommand(() -> cam.updatesd(), cam)
     );
     
-    /*sd.setDefaultCommand(
+    sd.setDefaultCommand(
       new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(controller.getLeftY(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(controller.getLeftX(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(controller.getRightX(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyX(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
         true, 
         true, 
         true)
       ,sd)
-    );*/
+    );
   }
 
   /*private void configureSwerveDriveCommands() {
