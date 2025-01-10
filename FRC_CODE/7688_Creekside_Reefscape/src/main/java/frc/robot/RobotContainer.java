@@ -8,6 +8,7 @@ import frc.robot.constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
 
 import frc.lib.Controller;
@@ -26,14 +27,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final SwerveDrive sd = new SwerveDrive();
+  //private final SwerveDrive sd = new SwerveDrive();
   private final Controller controller = new Controller(1);
+  private final Limelight cam =  new Limelight();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    configureSwerveDriveCommands();
+    //configureSwerveDriveCommands();
   }
 
   /**
@@ -46,8 +48,11 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    cam.setDefaultCommand(
+      new RunCommand(() -> cam.updatesd(), cam)
+    );
     
-    sd.setDefaultCommand(
+    /*sd.setDefaultCommand(
       new RunCommand(() -> sd.drive(
         -MathUtil.applyDeadband(controller.getLeftY(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(controller.getLeftX(), OperatorConstants.DEADBAND), 
@@ -56,10 +61,10 @@ public class RobotContainer {
         true, 
         true)
       ,sd)
-    );
+    );*/
   }
 
-  private void configureSwerveDriveCommands() {
+  /*private void configureSwerveDriveCommands() {
     controller.getA()
         .whileTrue(
             new RunCommand(
@@ -70,7 +75,7 @@ public class RobotContainer {
 
     controller.getLeftStick().whileTrue(new RunCommand(() -> sd.lockPosition(), sd));
 
-}
+}*/
 
   
   /**

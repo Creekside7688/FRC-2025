@@ -25,7 +25,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 
 public class Limelight extends SubsystemBase {
-    private final PhotonCamera robotcamera = new PhotonCamera("photonvision"); 
+    private final PhotonCamera robotcamera = new PhotonCamera( "7688Camera") ;
     private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     private final Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0));
     private final Transform3d cameraToRobot = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0));
@@ -35,6 +35,10 @@ public class Limelight extends SubsystemBase {
 
 
     public Limelight() {
+        SmartDashboard.putNumber("Target Yaw", 0);
+        SmartDashboard.putNumber("Target Pitch", 0);
+        SmartDashboard.putNumber("Target FID", 0);
+        SmartDashboard.putBoolean("Robot Has targets?", false);
         //PortForwarder.add(5800, "photonvision.local", 5800);
     }
     
@@ -52,16 +56,17 @@ public class Limelight extends SubsystemBase {
     
     }
 
-    public void limelightinit() {
-        SmartDashboard.putNumber("Target Yaw", 0);
-        SmartDashboard.putNumber("Target Pitch", 0);
-        SmartDashboard.putNumber("Target FID", 0);
-        SmartDashboard.putBoolean("Robot Has targets?", false);
-        
 
-
-
+    public void updatesd() {
+        var results = robotcamera.getLatestResult();
+        PhotonTrackedTarget target = results.getBestTarget();
+        if (target!=null) {
+            SmartDashboard.putNumber("Target FID", target.getFiducialId());
+            
+        }
     }
+
+
     public Pose3d getEstimateAprilTag() {
         
         var results = robotcamera.getLatestResult();
