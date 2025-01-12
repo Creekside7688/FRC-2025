@@ -2,25 +2,19 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.net.PortForwarder;
+
 //import frc.robot.swerve.SwerveDrive;
 
-import java.util.Optional;
 
 import org.photonvision.*;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonPipelineResult;
+
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 
@@ -42,7 +36,7 @@ public class Limelight extends SubsystemBase {
         //PortForwarder.add(5800, "photonvision.local", 5800);
     }
     
-    public void getrobotpos() {
+    /*public void getrobotpos() {
         Transform3d cameraToRobot = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0));
         
         var results = robotcamera.getLatestResult();
@@ -54,7 +48,7 @@ public class Limelight extends SubsystemBase {
         
     
     
-    }
+    }*/
 
 
     public void updatesd() {
@@ -88,23 +82,37 @@ public class Limelight extends SubsystemBase {
     public double TargetYaw() {
         var results = robotcamera.getLatestResult();
         PhotonTrackedTarget target = results.getBestTarget();
-        SmartDashboard.putNumber("Target Yaw", target.getYaw());
-        return target.getYaw();
+        if (target!=null) {
+            SmartDashboard.putNumber("Target Yaw", target.getYaw());
+            return target.getYaw();
+
+        } else {
+            return 0;
+        }
 
     }
 
     public double TargetPitch() {
         var results = robotcamera.getLatestResult();
         PhotonTrackedTarget target = results.getBestTarget();
-        SmartDashboard.putNumber("Target Pitch", target.getPitch());
-        return target.getPitch();
+        if (target!=null) {
+            SmartDashboard.putNumber("Target Pitch", target.getPitch());
+            return target.getPitch();
+        } else {
+            return 0;
+        }
     }
 
     public int getAprilTag() {
         var results = robotcamera.getLatestResult();
         PhotonTrackedTarget target = results.getBestTarget();
-        SmartDashboard.putNumber("Target FID", target.getFiducialId());
-        return target.getFiducialId();
+        if (target!=null) {
+            SmartDashboard.putNumber("Target FID", target.getFiducialId());
+            return target.getFiducialId();
+        } else {
+
+            return 0;
+        }
     }
 
     public boolean CameraHasTargets() {

@@ -14,11 +14,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class FlightControl {
     private final Joystick joystick;
     private final Trigger button1;
+    private final Trigger button2;
+    private final Trigger button3;
 
     public  FlightControl(int port) {
         joystick = new Joystick(port);
 
         button1 = new JoystickButton(joystick, 1);
+        button2 = new JoystickButton(joystick, 2);
+        button3 = new JoystickButton(joystick, 3);
 
     }
     
@@ -41,6 +45,12 @@ public class FlightControl {
 
     public Trigger getButton1() {
         return button1;
+    }
+    public Trigger getButton2() {
+        return button2;
+    }
+    public Trigger getButton3() {
+        return button3;
     }
 
 

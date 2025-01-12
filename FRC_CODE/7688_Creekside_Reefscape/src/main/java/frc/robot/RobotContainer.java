@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.HexAlign;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
@@ -32,6 +33,8 @@ public class RobotContainer {
   private final Controller controller = new Controller(1);
   private final Limelight cam =  new Limelight();
   private final FlightControl flightcont = new FlightControl(1);
+
+  private final HexAlign hexalign = new HexAlign(cam, sd);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -66,8 +69,13 @@ public class RobotContainer {
     );
   }
 
-  /*private void configureSwerveDriveCommands() {
-    controller.getA()
+  private void configureSubsystemCommands() {
+    flightcont.getButton1().onTrue(hexalign);
+
+  }
+
+  private void configureSwerveDriveCommands() {
+    flightcont.getButton2()
         .whileTrue(
             new RunCommand(
                 () -> sd.zeroHeading(),
@@ -75,9 +83,9 @@ public class RobotContainer {
             )
         );
 
-    controller.getLeftStick().whileTrue(new RunCommand(() -> sd.lockPosition(), sd));
+    flightcont.getButton2().whileTrue(new RunCommand(() -> sd.lockPosition(), sd));
 
-}*/
+}
 
   
   /**
