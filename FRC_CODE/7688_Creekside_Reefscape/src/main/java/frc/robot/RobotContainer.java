@@ -83,7 +83,7 @@ public class RobotContainer {
             )
         );
 
-    flightcont.getButton2().whileTrue(new RunCommand(() -> sd.lockPosition(), sd));
+    flightcont.getButton3().whileTrue(new RunCommand(() -> sd.lockPosition(), sd));
 
 }
 

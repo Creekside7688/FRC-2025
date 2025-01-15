@@ -11,6 +11,7 @@ import java.util.Arrays;
 import org.photonvision.PhotonUtils;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.ApriltagConstants;
 import frc.robot.constants.DriveConstants;
@@ -84,6 +85,9 @@ public class HexAlign extends Command {
       rotate = (ApriltagConstants.CameraAprilAngle - targetYaw) * ApriltagConstants.CameraTurnGain * DriveConstants.MAXIMUM_ANGULAR_SPEED_RADIANS_PER_SECOND;
       forward = (ApriltagConstants.CameraTagRange - targetRange) * ApriltagConstants.RobotStrafeGain * DriveConstants.MAXIMUM_LIMITED_SPEED_METRES_PER_SECOND;
       strafe = 0;
+      SmartDashboard.putNumber("APL Rotate", rotate);
+      SmartDashboard.putNumber("APL Forward", forward);
+      SmartDashboard.putNumber("APL Strafe", strafe);
 
     }
     finished = true;
