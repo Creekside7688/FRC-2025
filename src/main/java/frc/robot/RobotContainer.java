@@ -6,8 +6,13 @@ package frc.robot;
 
 import frc.robot.constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ElevatorTestOFF;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
+import frc.robot.commands.ElevatorTestDOWN;
+import frc.robot.commands.ElevatorTestUP;
+import frc.robot.commands.ElevatorTestOFF;
+import frc.robot.subsystems.ElevatorTestSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
@@ -29,12 +34,18 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
   private final Controller controller = new Controller(1);
   private final Limelight cam =  new Limelight();
   private final FlightControl flightcont = new FlightControl(1);
 
   private final HexAlign hexalign = new HexAlign(cam, sd);
+
+  private final ElevatorTestOFF elevatorTestOFF = new ElevatorTestOFF(m_ElevatorTestSubsystem);
+  private final ElevatorTestUP elevatorTestUP = new ElevatorTestUP(m_ElevatorTestSubsystem);
+  private final ElevatorTestDOWN elevatorTestDOWN = new ElevatorTestDOWN(m_ElevatorTestSubsystem);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -53,20 +64,23 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    cam.setDefaultCommand(
-      new RunCommand(() -> cam.updatesd(), cam)
-    );
-    
-    sd.setDefaultCommand(
-      new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(flightcont.getJoyX(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
-        true, 
-        true, 
-        true)
-      ,sd)
-    );
+    // cam.setDefaultCommand(
+    //   new RunCommand(() -> cam.updatesd(), cam)
+    // );
+    controller.getX().whileTrue(elevatorTestDOWN);
+    controller.getY().whileTrue(elevatorTestUP);
+    controller.getB().whileTrue(elevatorTestOFF);
+
+    // sd.setDefaultCommand(
+    //   new RunCommand(() -> sd.drive(
+    //     -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
+    //     -MathUtil.applyDeadband(flightcont.getJoyX(), OperatorConstants.DEADBAND), 
+    //     -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
+    //     true, 
+    //     true, 
+    //     true)
+    //   ,sd)
+    // );
   }
 
   private void configureSubsystemCommands() {
