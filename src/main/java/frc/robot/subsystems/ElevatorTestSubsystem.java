@@ -5,8 +5,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.ElevatorTestCommand;
+import frc.robot.commands.ElevatorTestUP;
+import frc.robot.commands.ElevatorTestOFF;
+import frc.robot.commands.ElevatorTestDOWN;
 import frc.robot.constants.ElevatorTestConstants;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.spark.SparkMax;
@@ -15,6 +20,15 @@ import com.revrobotics.RelativeEncoder;
 public class ElevatorTestSubsystem extends SubsystemBase {
   private final SparkMax motor;
   private final RelativeEncoder encoder;
+
+  private Mechanism2d elevatorMech = new Mechanism2d(3, 3);
+  private MechanismRoot2d elevatorRoot = 
+      elevatorMech.getRoot("superstructure", 1.5, 0.5);
+  private MechanismLigament2d elevator =
+      elevatorRoot.append(
+              new MechanismLigament2d("elevator", 0.5, 90)
+              );
+
   /** Creates a new ElevatorTestSubsystem. */
   public ElevatorTestSubsystem() {
     motor = new SparkMax(ElevatorTestConstants.MOTOR_ID, SparkMax.MotorType.kBrushless);
@@ -25,8 +39,7 @@ public class ElevatorTestSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-
+      updateDashboard();
   }
 
   public void spinUp() {
@@ -44,5 +57,6 @@ public class ElevatorTestSubsystem extends SubsystemBase {
 
   public void updateDashboard() {
     SmartDashboard.putNumber("Elevator Test RPM", encoder.getVelocity());
+    SmartDashboard.putData("Elevator", elevatorMech);
   }
 }
