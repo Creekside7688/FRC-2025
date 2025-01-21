@@ -26,7 +26,7 @@ public class EndEffector extends SubsystemBase {
   }
 
   public boolean sensordetect() {
-    boolean sensorvalue = sensor.get();
+    boolean sensorvalue = !sensor.get();
     return sensorvalue;
   }
   @Override
