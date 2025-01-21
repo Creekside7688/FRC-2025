@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.EndEffectorConstants;
@@ -25,12 +26,12 @@ public class EndEffector extends SubsystemBase {
   }
 
   public boolean sensordetect() {
-    sensor.get();
     boolean sensorvalue = sensor.get();
     return sensorvalue;
   }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("sensordetect", sensordetect());
   }
 }
