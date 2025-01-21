@@ -6,14 +6,19 @@ package frc.robot;
 
 import frc.robot.constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.EndEffectorGrab;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
+import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
 
 import frc.lib.Controller;
 import frc.lib.FlightControl;
+
+import java.util.PrimitiveIterator;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -30,7 +35,9 @@ public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
-  private final Controller controller = new Controller(1);
+  private final Controller XboxController = new Controller(0);
+  private final EndEffector endEffector = new EndEffector();
+  private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final Limelight cam =  new Limelight();
   private final FlightControl flightcont = new FlightControl(1);
 
@@ -67,6 +74,9 @@ public class RobotContainer {
         true)
       ,sd)
     );
+
+
+    XboxController.getX().whileTrue(endEffectorGrab);
   }
 
   private void configureSubsystemCommands() {
