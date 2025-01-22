@@ -16,7 +16,7 @@ import frc.robot.constants.EndEffectorConstants;
 public class EndEffector extends SubsystemBase {
   private final SparkMax motor = new SparkMax(EndEffectorConstants.END_EFFECTOR_MOTOR_ID, MotorType.kBrushless);
   
-  private final DigitalInput sensor = new DigitalInput(8);
+  private final DigitalInput sensor = new DigitalInput(EndEffectorConstants.END_EFFECTOR_SENSOR_ID);
 
   public EndEffector() {
 
