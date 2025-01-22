@@ -82,12 +82,8 @@ public class RobotContainer {
     );
 
 
-<<<<<<< HEAD
     XboxController.getX().whileTrue(endEffectorGrab);
     XboxController.getY().whileTrue(endEffectorDrop);
-=======
-    
->>>>>>> 8c1ba3fbbe1ae491039e361c614ee4c9ba46f54b
   }
 
   private void configureSubsystemCommands() {
