@@ -29,6 +29,10 @@ public class EndEffector extends SubsystemBase {
     boolean sensorvalue = !sensor.get();
     return sensorvalue;
   }
+  public boolean sensordetectinverted() {
+    boolean sensorvalue = sensor.get();
+    return sensorvalue;
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

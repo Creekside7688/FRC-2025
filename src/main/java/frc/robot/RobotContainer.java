@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.EndEffectorDrop;
 import frc.robot.commands.EndEffectorGrab;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
@@ -38,6 +39,7 @@ public class RobotContainer {
   private final Controller XboxController = new Controller(0);
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
+  private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
   private final Limelight cam =  new Limelight();
   private final FlightControl flightcont = new FlightControl(1);
 
@@ -77,6 +79,7 @@ public class RobotContainer {
 
 
     XboxController.getX().whileTrue(endEffectorGrab);
+    XboxController.getY().whileTrue(endEffectorDrop);
   }
 
   private void configureSubsystemCommands() {
