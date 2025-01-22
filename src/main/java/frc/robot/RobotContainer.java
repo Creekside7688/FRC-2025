@@ -9,6 +9,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.EndEffectorGrab;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
+import frc.robot.commands.TriggerTest;
 import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Limelight;
@@ -35,11 +36,13 @@ public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
-  private final Controller XboxController = new Controller(0);
+  private final Controller XboxController = new Controller(1);
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final Limelight cam =  new Limelight();
-  private final FlightControl flightcont = new FlightControl(1);
+  private final FlightControl flightcont = new FlightControl(0);
+
+  private final TriggerTest tt = new TriggerTest();
 
   private final HexAlign hexalign = new HexAlign(cam, sd);
 
@@ -47,6 +50,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    configureSubsystemCommands();
     //configureSwerveDriveCommands();
   }
 
@@ -76,11 +80,11 @@ public class RobotContainer {
     );
 
 
-    XboxController.getX().whileTrue(endEffectorGrab);
+    
   }
 
   private void configureSubsystemCommands() {
-    flightcont.getButton1().onTrue(hexalign);
+    flightcont.getButton2().whileTrue(tt);
 
   }
 
