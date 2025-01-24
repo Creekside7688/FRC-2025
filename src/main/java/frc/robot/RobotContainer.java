@@ -31,6 +31,7 @@ import frc.lib.FlightControl;
 
 import java.util.PrimitiveIterator;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -48,7 +49,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
-  private final Controller XboxController = new Controller(1);
+  private final Controller controller = new Controller(1);
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
@@ -67,8 +68,9 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    CameraServer.startAutomaticCapture();
     configureBindings();
-    configureSubsystemCommands();
+    //configureSubsystemCommands();
     //configureSwerveDriveCommands();
   }
 
@@ -83,23 +85,12 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    // cam.setDefaultCommand(
-    //   new RunCommand(() -> cam.updatesd(), cam)
-    // );
+
     controller.getX().whileTrue(elevatorTestDOWN);
     controller.getY().whileTrue(elevatorTestUP);
     controller.getB().whileTrue(elevatorTestOFF);
 
-    // sd.setDefaultCommand(
-    //   new RunCommand(() -> sd.drive(
-    //     -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
-    //     -MathUtil.applyDeadband(flightcont.getJoyX(), OperatorConstants.DEADBAND), 
-    //     -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
-    //     true, 
-    //     true, 
-    //     true)
-    //   ,sd)
-    // );
+  
 
     cam.setDefaultCommand(
       new RunCommand(() -> cam.updatesd(), cam)
@@ -107,9 +98,9 @@ public class RobotContainer {
     
     sd.setDefaultCommand(
       new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(flightcont.getJoyX(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(controller.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(controller.getLeftY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(controller.getRightX(), OperatorConstants.DEADBAND), 
         true, 
         true, 
         true)
@@ -117,8 +108,8 @@ public class RobotContainer {
     );
 
 
-    XboxController.getX().whileTrue(endEffectorGrab);
-    XboxController.getY().whileTrue(endEffectorDrop);
+    controller.getLeftBumper().whileTrue(endEffectorGrab);
+    controller.getRightBumper().whileTrue(endEffectorDrop);
 
   }
 
