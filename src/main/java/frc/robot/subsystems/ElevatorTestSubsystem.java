@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ElevatorTestConstants;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
+
 
 public class ElevatorTestSubsystem extends SubsystemBase {
     private final SparkMax motor;
@@ -22,7 +24,10 @@ public class ElevatorTestSubsystem extends SubsystemBase {
     private MechanismRoot2d elevatorRoot = elevatorMech.getRoot("superstructure", 1.5, 0.5);
     private MechanismLigament2d elevator = elevatorRoot.append(
             new MechanismLigament2d("elevator", 0.5, 90));
+
     private double target; // Meters
+    private DigitalInput sensor;
+
     /** Creates a new ElevatorTestSubsystem. */
     public ElevatorTestSubsystem() {
         motor = new SparkMax(ElevatorTestConstants.MOTOR_ID, SparkMax.MotorType.kBrushless);
@@ -30,11 +35,17 @@ public class ElevatorTestSubsystem extends SubsystemBase {
 
         encoder = motor.getAlternateEncoder();
         encoder.setPositionConversionFactor(1);
+
+        sensor = new DigitalInput(ElevatorTestConstants.SENSOR_CHANNEL);
     }
 
     @Override
     public void periodic() {
         updateDashboard();
+
+        if (atBottom()) {
+            encoder.setPosition(0);
+        }
     }
 
     public double getTarget() {
@@ -64,6 +75,10 @@ public class ElevatorTestSubsystem extends SubsystemBase {
 
     public boolean atTarget() {
         return getPosition() == target;
+    }
+
+    public boolean atBottom() {
+        return !sensor.get(); // Invert with not to get true when at sensor is tripped 
     }
 
     public void updateDashboard() {

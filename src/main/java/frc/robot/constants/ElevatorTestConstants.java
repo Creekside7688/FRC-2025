@@ -9,4 +9,5 @@ public class ElevatorTestConstants {
     public static final int MOTOR_ID = 9;
     public static final int SPEED = 1;
 	public static final double HEIGHT_PER_ROTATION = 0;
+	public static final int SENSOR_CHANNEL = 0;
 }
