@@ -48,7 +48,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
-  private final Controller XboxController = new Controller(1);
+  private final Controller controller = new Controller(1);
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
@@ -117,8 +117,8 @@ public class RobotContainer {
     );
 
 
-    XboxController.getX().whileTrue(endEffectorGrab);
-    XboxController.getY().whileTrue(endEffectorDrop);
+    controller.getX().whileTrue(endEffectorGrab);
+    controller.getY().whileTrue(endEffectorDrop);
 
   }
 

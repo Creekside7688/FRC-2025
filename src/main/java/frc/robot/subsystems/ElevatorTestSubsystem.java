@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
 
 
@@ -28,13 +31,19 @@ public class ElevatorTestSubsystem extends SubsystemBase {
     private double target; // Meters
     private DigitalInput sensor;
 
+    private SparkMaxConfig config;
+
     /** Creates a new ElevatorTestSubsystem. */
     public ElevatorTestSubsystem() {
         motor = new SparkMax(ElevatorTestConstants.MOTOR_ID, SparkMax.MotorType.kBrushless);
         motor.set(0);
 
+        config = new SparkMaxConfig();
+        
+        config.encoder.positionConversionFactor(1);
         encoder = motor.getAlternateEncoder();
-        encoder.setPositionConversionFactor(1);
+
+        motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         sensor = new DigitalInput(ElevatorTestConstants.SENSOR_CHANNEL);
     }
@@ -45,6 +54,18 @@ public class ElevatorTestSubsystem extends SubsystemBase {
 
         if (atBottom()) {
             encoder.setPosition(0);
+        }
+
+        if (atTarget()) {
+            motor.set(0);
+        }
+
+        else if ((getTarget() - getPosition()) > 0.1) {
+            motor.set(ElevatorTestConstants.SPEED);
+        }
+
+        else if ((getTarget() - getPosition()) < 0.1) {
+            motor.set(-ElevatorTestConstants.SPEED);
         }
     }
 
@@ -74,7 +95,7 @@ public class ElevatorTestSubsystem extends SubsystemBase {
     }
 
     public boolean atTarget() {
-        return getPosition() == target;
+        return Math.abs(getPosition() - target) < 0.1;
     }
 
     public boolean atBottom() {
