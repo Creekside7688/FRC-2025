@@ -8,4 +8,5 @@ package frc.robot.constants;
 public class CageClimberConstants {
     public static final int CAGE_CLIMBER_MOTOR_ID = 13;    
     public static final double CAGE_CLIMBER_MOTOR_SPEED = 0.1;
+    public static final double CAGE_CLIMBER_MOTOR_SPEED_INVERTED = -0.1;
 }

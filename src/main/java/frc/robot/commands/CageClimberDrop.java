@@ -10,10 +10,10 @@ import frc.robot.constants.EndEffectorConstants;
 import frc.robot.subsystems.CageClimber;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CageClimberClimb extends Command {
+public class CageClimberDrop extends Command {
   private final CageClimber cageClimber;
   /** Creates a new CageClimberClimb. */
-  public CageClimberClimb(CageClimber cageClimber) {
+  public CageClimberDrop(CageClimber cageClimber) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.cageClimber = cageClimber;
     addRequirements(cageClimber);
@@ -22,7 +22,7 @@ public class CageClimberClimb extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    cageClimber.run(CageClimberConstants.CAGE_CLIMBER_MOTOR_SPEED);
+    cageClimber.run(CageClimberConstants.CAGE_CLIMBER_MOTOR_SPEED_INVERTED);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,6 +37,6 @@ public class CageClimberClimb extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return cageClimber.getPosition() = 50;
+    return cageClimber.getPosition() <= 0;
   }
 }

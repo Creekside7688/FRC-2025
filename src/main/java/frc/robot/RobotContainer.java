@@ -6,11 +6,14 @@ package frc.robot;
 
 import frc.robot.constants.OperatorConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.CageClimberClimb;
+import frc.robot.commands.CageClimberDrop;
 import frc.robot.commands.EndEffectorDrop;
 import frc.robot.commands.EndEffectorGrab;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
 import frc.robot.commands.TriggerTest;
+import frc.robot.subsystems.CageClimber;
 import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Limelight;
@@ -41,6 +44,8 @@ public class RobotContainer {
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
+  private final CageClimberClimb cageClimberClimb = new CageClimberClimb(null);
+  private final CageClimberDrop cageClimberDrop = new CageClimberDrop(null);
   private final Limelight cam =  new Limelight();
   private final FlightControl flightcont = new FlightControl(0);
 
@@ -84,6 +89,8 @@ public class RobotContainer {
 
     XboxController.getX().whileTrue(endEffectorGrab);
     XboxController.getY().whileTrue(endEffectorDrop);
+    XboxController.getRightBumper().whileTrue(cageClimberClimb);
+    XboxController.getLeftBumper().whileTrue(cageClimberClimb);
   }
 
   private void configureSubsystemCommands() {
