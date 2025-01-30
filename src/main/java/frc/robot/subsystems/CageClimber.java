@@ -13,8 +13,8 @@ import frc.robot.constants.CageClimberConstants;
 import frc.robot.constants.EndEffectorConstants;
 
 public class CageClimber extends SubsystemBase {
-  private final RelativeEncoder rotationsensor = motor.getEncoder();
   private final SparkMax motor = new SparkMax(CageClimberConstants.CAGE_CLIMBER_MOTOR_ID, MotorType.kBrushless);
+  private final RelativeEncoder rotationsensor = motor.getEncoder();
   /** Creates a new Climber. */
   public CageClimber() {
 
@@ -22,7 +22,14 @@ public class CageClimber extends SubsystemBase {
  public void run(double speed) {
     motor.set(speed);
   }
-  
+  public double getPosition() {
+    double motorposition = rotationsensor.getPosition();
+    return motorposition;
+  }
+  public void resetrotationsensor() {
+    rotationsensor.setPosition(0);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

@@ -40,14 +40,15 @@ public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
-  private final Controller XboxController = new Controller(1);
+  private final Controller XboxController = new Controller(0);
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
-  private final CageClimberClimb cageClimberClimb = new CageClimberClimb(null);
-  private final CageClimberDrop cageClimberDrop = new CageClimberDrop(null);
+  private final CageClimber cageClimber = new CageClimber();
+  private final CageClimberClimb cageClimberClimb = new CageClimberClimb(cageClimber);
+  private final CageClimberDrop cageClimberDrop = new CageClimberDrop(cageClimber);
   private final Limelight cam =  new Limelight();
-  private final FlightControl flightcont = new FlightControl(0);
+  private final FlightControl flightcont = new FlightControl(1);
 
   private final TriggerTest tt = new TriggerTest();
 
