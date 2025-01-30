@@ -90,7 +90,7 @@ public class RobotContainer {
     XboxController.getX().whileTrue(endEffectorGrab);
     XboxController.getY().whileTrue(endEffectorDrop);
     XboxController.getRightBumper().whileTrue(cageClimberClimb);
-    XboxController.getLeftBumper().whileTrue(cageClimberClimb);
+    XboxController.getLeftBumper().whileTrue(cageClimberDrop);
   }
 
   private void configureSubsystemCommands() {
