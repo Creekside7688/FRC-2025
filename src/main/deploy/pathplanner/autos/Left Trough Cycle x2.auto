@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left to BargeRightHex"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "BargeRightHex Trough Score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BargeRightHex to Coral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Coral Human Pickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Coral to StationLeftHex"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StationLeftHex Trough Score"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

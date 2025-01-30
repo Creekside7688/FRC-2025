@@ -115,11 +115,10 @@ public class SwerveDrive extends SubsystemBase {
             visionMeasurementDeviations
         );
 
-        /*RobotConfig config;
-        try{
+        RobotConfig config;
+        try {
             config = RobotConfig.fromGUISettings();
-        }
-        catch(Exception e){
+        } catch(Exception e) {
             config = null;
             e.printStackTrace();
         }
@@ -140,7 +139,7 @@ public class SwerveDrive extends SubsystemBase {
                 return false;
             },
             this
-        );*/
+        );
 
         SimCameraProperties cameraProperties = new SimCameraProperties();
         cameraProperties.setCalibration(640, 480, Rotation2d.fromDegrees(75.76079874010732));
