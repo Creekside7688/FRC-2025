@@ -16,17 +16,13 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
 
 
 public class ElevatorTestSubsystem extends SubsystemBase {
     private final SparkMax motor;
     private final RelativeEncoder encoder;
-
-    private Mechanism2d elevatorMech = new Mechanism2d(3, 3);
-    private MechanismRoot2d elevatorRoot = elevatorMech.getRoot("superstructure", 1.5, 0.5);
-    private MechanismLigament2d elevator = elevatorRoot.append(
-            new MechanismLigament2d("elevator", 0.5, 90));
 
     private double target; // Meters
     private DigitalInput sensor;
@@ -35,17 +31,24 @@ public class ElevatorTestSubsystem extends SubsystemBase {
 
     /** Creates a new ElevatorTestSubsystem. */
     public ElevatorTestSubsystem() {
+        
+
         motor = new SparkMax(ElevatorTestConstants.MOTOR_ID, SparkMax.MotorType.kBrushless);
         motor.set(0);
 
         config = new SparkMaxConfig();
         
-        config.encoder.positionConversionFactor(1);
-        encoder = motor.getAlternateEncoder();
+        config.encoder.positionConversionFactor(1.0/12.0);
+        config.idleMode(IdleMode.kBrake);
 
         motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        encoder = motor.getEncoder();
 
         sensor = new DigitalInput(ElevatorTestConstants.SENSOR_CHANNEL);
+
+        encoder.setPosition(0);
+
+        target = 3.8;
     }
 
     @Override
@@ -60,11 +63,11 @@ public class ElevatorTestSubsystem extends SubsystemBase {
             motor.set(0);
         }
 
-        else if ((getTarget() - getPosition()) > 0.1) {
+        else if ((getTarget() - encoder.getPosition()) > 0.1) {
             motor.set(ElevatorTestConstants.SPEED);
         }
 
-        else if ((getTarget() - getPosition()) < 0.1) {
+        else if ((getTarget() - encoder.getPosition()) < 0.1) {
             motor.set(-ElevatorTestConstants.SPEED);
         }
     }
@@ -95,7 +98,7 @@ public class ElevatorTestSubsystem extends SubsystemBase {
     }
 
     public boolean atTarget() {
-        return Math.abs(getPosition() - target) < 0.1;
+        return Math.abs(encoder.getPosition() - target) < 0.1;
     }
 
     public boolean atBottom() {
@@ -104,8 +107,10 @@ public class ElevatorTestSubsystem extends SubsystemBase {
 
     public void updateDashboard() {
         SmartDashboard.putNumber("Elevator Test RPM", encoder.getVelocity());
-        SmartDashboard.putData("Elevator", elevatorMech);
+        //SmartDashboard.putData("Elevator", elevatorMech);
         SmartDashboard.putNumber("Elevator Rotations", encoder.getPosition());
         SmartDashboard.putNumber("Calculated Elevator Position", this.getPosition());
+        SmartDashboard.putNumber("Target height", target);
+        target = SmartDashboard.getNumber("Target height", 0);
     }
 }

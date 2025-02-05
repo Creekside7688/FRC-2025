@@ -117,8 +117,8 @@ public class RobotContainer {
     );
 
 
-    controller.getX().whileTrue(endEffectorGrab);
-    controller.getY().whileTrue(endEffectorDrop);
+    //controller.getX().whileTrue(endEffectorGrab);
+    //controller.getY().whileTrue(endEffectorDrop);
 
   }
 
