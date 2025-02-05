@@ -17,6 +17,7 @@ import frc.robot.subsystems.ElevatorTestSubsystem;
 
 import frc.robot.commands.EndEffectorDrop;
 import frc.robot.commands.EndEffectorGrab;
+import frc.robot.commands.EndEffectorReverse;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
 import frc.robot.commands.TriggerTest;
@@ -37,6 +38,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.climber;
+import frc.robot.commands.cimb;
+import frc.robot.commands.lower;;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -53,8 +57,15 @@ public class RobotContainer {
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
+  private final EndEffectorReverse endEffectorReverse = new EndEffectorReverse(endEffector);
   private final Limelight cam =  new Limelight();
   private final FlightControl flightcont = new FlightControl(0);
+
+
+  private final climber clmber = new climber();
+  private final cimb climbCommand = new cimb(clmber);
+  private final lower lowerCommand = new lower(clmber);
+
 
   private final TriggerTest tt = new TriggerTest();
 
@@ -71,7 +82,7 @@ public class RobotContainer {
     CameraServer.startAutomaticCapture();
     configureBindings();
     //configureSubsystemCommands();
-    //configureSwerveDriveCommands();
+    configureSwerveDriveCommands();
   }
 
   /**
@@ -101,7 +112,7 @@ public class RobotContainer {
         -MathUtil.applyDeadband(controller.getLeftX() * -1, OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(controller.getLeftY(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(controller.getRightX(), OperatorConstants.DEADBAND), 
-        true, 
+        false, 
         true, 
         true)
       ,sd)
@@ -109,8 +120,20 @@ public class RobotContainer {
 
 
     controller.getLeftBumper().whileTrue(endEffectorGrab);
-    controller.getRightBumper().whileTrue(endEffectorDrop);
+    controller.getRightBumper().whileTrue(endEffectorReverse);
 
+    controller.getRightTrigger().whileTrue(new RunCommand(() -> sd.drive(
+        -MathUtil.applyDeadband(controller.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(controller.getLeftY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(controller.getRightX(), OperatorConstants.DEADBAND), 
+        true, 
+        true, 
+        true)
+      ,sd));
+
+
+    //controller.getRightTrigger().whileTrue(lowerCommand);
+    //controller.getLeftTrigger().whileTrue(climbCommand);
   }
 
   private void configureSubsystemCommands() {
@@ -119,7 +142,7 @@ public class RobotContainer {
   }
 
   private void configureSwerveDriveCommands() {
-    flightcont.getButton2()
+    controller.getRightStick()
         .whileTrue(
             new RunCommand(
                 () -> sd.zeroHeading(),
