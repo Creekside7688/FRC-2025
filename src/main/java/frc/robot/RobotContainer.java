@@ -4,16 +4,14 @@
 
 package frc.robot;
 
+import frc.robot.constants.ElevatorConstants;
 import frc.robot.constants.OperatorConstants;
 import frc.robot.commands.Autos;
 
 import frc.robot.commands.ElevatorTestOFF;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
-import frc.robot.commands.ElevatorTestDOWN;
-import frc.robot.commands.ElevatorTestUP;
-import frc.robot.commands.ElevatorTestOFF;
-import frc.robot.subsystems.ElevatorTestSubsystem;
+import frc.robot.subsystems.Elevator;
 
 import frc.robot.commands.EndEffectorDrop;
 import frc.robot.commands.EndEffectorGrab;
@@ -33,6 +31,7 @@ import java.util.PrimitiveIterator;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -46,7 +45,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
+  private final Elevator elevator = new Elevator();
   private final SwerveDrive sd = new SwerveDrive();
   private final Controller controller = new Controller(1);
   private final EndEffector endEffector = new EndEffector();
@@ -58,10 +57,6 @@ public class RobotContainer {
   private final TriggerTest tt = new TriggerTest();
 
   private final HexAlign hexalign = new HexAlign(cam, sd);
-
-  private final ElevatorTestOFF elevatorTestOFF = new ElevatorTestOFF(m_ElevatorTestSubsystem);
-  private final ElevatorTestUP elevatorTestUP = new ElevatorTestUP(m_ElevatorTestSubsystem);
-  private final ElevatorTestDOWN elevatorTestDOWN = new ElevatorTestDOWN(m_ElevatorTestSubsystem);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -86,10 +81,7 @@ public class RobotContainer {
     // cam.setDefaultCommand(
     //   new RunCommand(() -> cam.updatesd(), cam)
     // );
-    controller.getX().whileTrue(elevatorTestDOWN);
-    controller.getY().whileTrue(elevatorTestUP);
-    controller.getB().whileTrue(elevatorTestOFF);
-
+    
     // sd.setDefaultCommand(
     //   new RunCommand(() -> sd.drive(
     //     -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
@@ -100,6 +92,24 @@ public class RobotContainer {
     //     true)
     //   ,sd)
     // );
+
+    controller.getA().onTrue(
+            new InstantCommand(
+                () -> elevator.setTarget(ElevatorConstants.LEVEL_1_HEIGHT)
+                )
+            );
+
+    controller.getB().onTrue(
+            new InstantCommand(
+                () -> elevator.setTarget(ElevatorConstants.LEVEL_2_HEIGHT)
+                )
+            );
+    controller.getX().onTrue(
+            new InstantCommand(
+                () -> elevator.setTarget(ElevatorConstants.LEVEL_3_HEIGHT)
+                )
+            );
+
 
     cam.setDefaultCommand(
       new RunCommand(() -> cam.updatesd(), cam)
