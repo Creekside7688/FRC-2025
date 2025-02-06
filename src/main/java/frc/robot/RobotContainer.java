@@ -132,8 +132,8 @@ public class RobotContainer {
       ,sd));
 
 
-    //controller.getRightTrigger().whileTrue(lowerCommand);
-    //controller.getLeftTrigger().whileTrue(climbCommand);
+    controller.getRightTrigger().whileTrue(lowerCommand);
+    controller.getLeftTrigger().whileTrue(climbCommand);
   }
 
   private void configureSubsystemCommands() {
