@@ -16,10 +16,10 @@ public class ElevatorConstants {
 	public static final double LEVEL_3_HEIGHT = 8.1;
 	public static final double LEVEL_4_HEIGHT = 0;
 
-	public static final int LEVEL_0_BUTTON = 0;
-	public static final int LEVEL_1_BUTTON = 0;
-	public static final int LEVEL_2_BUTTON = 0;
-	public static final int LEVEL_3_BUTTON = 0;
-
+    public static final double KV = 0;
+    public static final double KP = 0;
+    public static final double KI = 0;
+    public static final double KD = 0;
+    
 	public static final double GEARBOX_RATIO = 1.0/12.0;
 }
