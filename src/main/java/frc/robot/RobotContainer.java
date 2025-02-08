@@ -81,7 +81,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     CameraServer.startAutomaticCapture();
     configureBindings();
-    //configureSubsystemCommands();
+    configureSubsystemCommands();
     configureSwerveDriveCommands();
   }
 
@@ -109,9 +109,9 @@ public class RobotContainer {
     
     sd.setDefaultCommand(
       new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(controller.getLeftX() * -1, OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(controller.getLeftY(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(controller.getRightX(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
         false, 
         true, 
         true)
@@ -123,9 +123,9 @@ public class RobotContainer {
     controller.getRightBumper().whileTrue(endEffectorReverse);
 
     controller.getRightTrigger().whileTrue(new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(controller.getLeftX() * -1, OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(controller.getLeftY(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(controller.getRightX(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
         true, 
         true, 
         true)
@@ -138,12 +138,12 @@ public class RobotContainer {
 
   private void configureSubsystemCommands() {
     flightcont.getButton2().whileTrue(tt);
-    flightcont.getButton(4).whileTrue(hexalign);
+    flightcont.getButton1().whileTrue(hexalign);
 
   }
 
   private void configureSwerveDriveCommands() {
-    controller.getRightStick()
+    flightcont.getButton3()
         .whileTrue(
             new RunCommand(
                 () -> sd.zeroHeading(),

@@ -2,7 +2,7 @@ package frc.robot.constants;
 
 public class ApriltagConstants {
     public static final double CameraHorPos = 0;
-    public static final double CameraVertPos = 0.26; //Placebo number
+    public static final double CameraVertPos = 0.23; //Placebo number
     public static final double CameraAngle = 0; //In Degrees
 
     public static final String[] CoralTags = {"1", "2", "12", "13"};

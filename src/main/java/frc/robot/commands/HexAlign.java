@@ -50,6 +50,7 @@ public class HexAlign extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    finished = false;
     SmartDashboard.putBoolean("HexRun", true);
     if (limelight.CameraHasTargets()) {
 
@@ -94,17 +95,17 @@ public class HexAlign extends Command {
 
       swerveDrive.drive(0,  0 , 0, true, false, true);
       
-      if (limelight.TargetYaw() < -5) {
-        while (Math.abs(limelight.TargetYaw()) > 10) {
-          swerveDrive.drive(0,  -1 , 0, true, false, true);
-        }
-      } else if (limelight.TargetYaw() > 5) {
-        while (Math.abs(limelight.TargetYaw()) > 10) {
+      /*if (targetYaw < -8) {
+        while (Math.abs(limelight.TargetYaw()) > 8) {
           swerveDrive.drive(0,  1 , 0, true, false, true);
+        }
+      } else if (targetYaw > 8) {
+        while (Math.abs(limelight.TargetYaw()) > 8) {
+          swerveDrive.drive(0,  -1 , 0, true, false, true);
         }
       } else {
         swerveDrive.drive(0,  0 , 0, true, false, true);
-      }
+      }*/
       
 
     } else {
@@ -120,7 +121,16 @@ public class HexAlign extends Command {
     if (targetRange < 1) {
       finished = true;
     } else {
-      swerveDrive.drive(1, 0, 0, true, false, true);
+      targetYaw = limelight.TargetYaw();
+      if (targetYaw < -8) {
+        swerveDrive.drive(1, 0, 1, true, false, true);
+      } else if (targetYaw > 8) {
+        swerveDrive.drive(1, 0, -1, true, false, true);
+ 
+      } else {
+        swerveDrive.drive(1, 0, 0, true, false, true);
+
+      }
       
       
       targetRange = (PhotonUtils.calculateDistanceToTargetMeters(
