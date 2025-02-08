@@ -1,12 +1,8 @@
 package frc.robot.constants;
 
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.config.RobotConfig;
-
-/*import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;*/
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -46,17 +42,11 @@ public class AutonomousConstants {
         MAXIMUM_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED
     );
 
-
-    public static final PPHolonomicDriveController pfc = new PPHolonomicDriveController(
-        new PIDConstants(PATH_TRANSLATION_P, PATH_TRANSLATION_I, PATH_THETA_D),
-        new PIDConstants(PATH_THETA_P, PATH_THETA_I, PATH_THETA_D));
-        
-        /*
     public static final HolonomicPathFollowerConfig pathFollowConfig = new HolonomicPathFollowerConfig(
         new PIDConstants(PATH_TRANSLATION_P, PATH_TRANSLATION_I, PATH_TRANSLATION_D),
         new PIDConstants(PATH_THETA_P, PATH_THETA_I, PATH_THETA_D),
         MAXIMUM_SPEED_METRES_PER_SECOND,
         DriveConstants.CHASSIS_RADIUS,
         new ReplanningConfig()
-    );*/
+    );
 }

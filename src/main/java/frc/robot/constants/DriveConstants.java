@@ -11,15 +11,15 @@ public class DriveConstants {
     public static final double MAXIMUM_SPEED_METRES_PER_SECOND = 4;
     public static final double MAXIMUM_ANGULAR_SPEED_RADIANS_PER_SECOND = 2 * Math.PI;
 
-    public static final double MAXIMUM_LIMITED_SPEED_METRES_PER_SECOND = 0.5;
+    public static final double MAXIMUM_LIMITED_SPEED_METRES_PER_SECOND = 1;
     public static final double MAXIMUM_LIMITED_ANGULAR_SPEED_RADIANS_PER_SECOND = 0.5 * Math.PI;
 
     public static final double MAXIMUM_ELEVATOR_DRIVE_SPEED = 2;
     public static final double MAXIMUM_ELEVATOR_ROTATION_SPEED = 1.5 * Math.PI;
 
 
-    public static final double DIRECTION_SLEW_RATE = 8; // radians per second
-    public static final double MAGNITUDE_SLEW_RATE = 8; // percent per second (1 = 100%)
+    public static final double DIRECTION_SLEW_RATE = 1.2; // radians per second
+    public static final double MAGNITUDE_SLEW_RATE = 1.8; // percent per second (1 = 100%)
     public static final double ROTATION_SLEW_RATE = 2.0; // percent per second (1 = 100%)
 
     public static final double TRACK_WIDTH = Units.inchesToMeters(19.5); // Distance between left and right wheels on robot

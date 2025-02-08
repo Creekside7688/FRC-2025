@@ -1,0 +1,67 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.4677270615802492,
+      "y": 7.33104961705419
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AmpNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Pickup Amp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AmpNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Pickup 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Amp Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AmpNote"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
