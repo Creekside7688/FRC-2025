@@ -5,31 +5,45 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.CageClimberConstants;
 import frc.robot.constants.EndEffectorConstants;
 
 public class CageClimber extends SubsystemBase {
-  private final SparkMax motor = new SparkMax(CageClimberConstants.CAGE_CLIMBER_MOTOR_ID, MotorType.kBrushless);
-  private final RelativeEncoder rotationsensor = motor.getEncoder();
-  /** Creates a new Climber. */
-  public CageClimber() {
-
+  private final TalonSRX LeftMotor = new TalonSRX(1);
+  private final TalonSRX RightMotor = new TalonSRX(2);
+  private final  DigitalInput sensor1 = new DigitalInput(0);
+     private final DigitalInput sensor2 = new DigitalInput(1);
+    /** Creates a new Climber. */
+    public CageClimber() {
+      LeftMotor.follow(RightMotor);
+    }
+   public void run(double speed) {
+      RightMotor.set(ControlMode.PercentOutput, speed);
+    }
+  public boolean sensor1detect() {
+    boolean sensorvalue = !sensor1.get();
+    return sensorvalue;
   }
- public void run(double speed) {
-    motor.set(speed);
+  public boolean sensor1detectinverted() {
+    boolean sensorvalue = !sensor1.get();
+    return sensorvalue;
   }
-  public double getPosition() {
-    double motorposition = rotationsensor.getPosition();
-    return motorposition;
+  public boolean sensor2detect() {
+    boolean sensorvalue = !sensor2.get();
+    return sensorvalue;
   }
-  public void resetrotationsensor() {
-    rotationsensor.setPosition(0);
+  public boolean sensor2detectinverted() {
+    boolean sensorvalue = !sensor2.get();
+    return sensorvalue;
   }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
