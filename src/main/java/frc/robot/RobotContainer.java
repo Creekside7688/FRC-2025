@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.constants.OperatorConstants;
 import frc.robot.commands.Autos;
 
+
 import frc.robot.commands.ElevatorTestOFF;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
@@ -15,12 +16,14 @@ import frc.robot.commands.ElevatorTestUP;
 import frc.robot.commands.ElevatorTestOFF;
 import frc.robot.subsystems.ElevatorTestSubsystem;
 
+
 import frc.robot.commands.EndEffectorDrop;
 import frc.robot.commands.EndEffectorGrab;
 import frc.robot.commands.EndEffectorReverse;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
 import frc.robot.commands.TriggerTest;
+import frc.robot.subsystems.CageClimber;
 import frc.robot.subsystems.EndEffector;
 
 import frc.robot.subsystems.ExampleSubsystem;
@@ -53,13 +56,17 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
-  private final Controller controller = new Controller(1);
+
+  private final Controller XboxController = new Controller(0);
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
-  private final EndEffectorReverse endEffectorReverse = new EndEffectorReverse(endEffector);
+  private final CageClimber cageClimber = new CageClimber();
+  private final CageClimberClimb cageClimberClimb = new CageClimberClimb(cageClimber);
+  private final CageClimberDrop cageClimberDrop = new CageClimberDrop(cageClimber);
+
   private final Limelight cam =  new Limelight();
-  private final FlightControl flightcont = new FlightControl(0);
+  private final FlightControl flightcont = new FlightControl(1);
 
 
   private final climber clmber = new climber();
@@ -119,6 +126,7 @@ public class RobotContainer {
     );
 
 
+
     controller.getLeftBumper().whileTrue(endEffectorGrab);
     controller.getRightBumper().whileTrue(endEffectorReverse);
 
@@ -133,7 +141,7 @@ public class RobotContainer {
 
 
     controller.getRightTrigger().whileTrue(lowerCommand);
-    controller.getLeftTrigger().whileTrue(climbCommand);
+    controller.getLeftTrigger().whileTrue(climbC
   }
 
   private void configureSubsystemCommands() {
