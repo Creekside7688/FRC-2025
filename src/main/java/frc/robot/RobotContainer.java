@@ -6,15 +6,26 @@ package frc.robot;
 
 import frc.robot.constants.OperatorConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.CageClimberClimb;
-import frc.robot.commands.CageClimberDrop;
+
+
+import frc.robot.commands.ElevatorTestOFF;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.HexAlign;
+import frc.robot.commands.ElevatorTestDOWN;
+import frc.robot.commands.ElevatorTestUP;
+import frc.robot.commands.ElevatorTestOFF;
+import frc.robot.subsystems.ElevatorTestSubsystem;
+
+
 import frc.robot.commands.EndEffectorDrop;
 import frc.robot.commands.EndEffectorGrab;
+import frc.robot.commands.EndEffectorReverse;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
 import frc.robot.commands.TriggerTest;
 import frc.robot.subsystems.CageClimber;
 import frc.robot.subsystems.EndEffector;
+
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
@@ -24,11 +35,15 @@ import frc.lib.FlightControl;
 
 import java.util.PrimitiveIterator;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.climber;
+import frc.robot.commands.cimb;
+import frc.robot.commands.lower;;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -39,7 +54,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
+
   private final Controller XboxController = new Controller(0);
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
@@ -47,19 +64,32 @@ public class RobotContainer {
   private final CageClimber cageClimber = new CageClimber();
   private final CageClimberClimb cageClimberClimb = new CageClimberClimb(cageClimber);
   private final CageClimberDrop cageClimberDrop = new CageClimberDrop(cageClimber);
+
   private final Limelight cam =  new Limelight();
   private final FlightControl flightcont = new FlightControl(1);
+
+
+  private final climber clmber = new climber();
+  private final cimb climbCommand = new cimb(clmber);
+  private final lower lowerCommand = new lower(clmber);
+
 
   private final TriggerTest tt = new TriggerTest();
 
   private final HexAlign hexalign = new HexAlign(cam, sd);
 
+  private final ElevatorTestOFF elevatorTestOFF = new ElevatorTestOFF(m_ElevatorTestSubsystem);
+  private final ElevatorTestUP elevatorTestUP = new ElevatorTestUP(m_ElevatorTestSubsystem);
+  private final ElevatorTestDOWN elevatorTestDOWN = new ElevatorTestDOWN(m_ElevatorTestSubsystem);
+
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    CameraServer.startAutomaticCapture();
     configureBindings();
-    configureSubsystemCommands();
-    //configureSwerveDriveCommands();
+    //configureSubsystemCommands();
+    configureSwerveDriveCommands();
   }
 
   /**
@@ -72,26 +102,46 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
+
+    controller.getX().whileTrue(elevatorTestDOWN);
+    controller.getY().whileTrue(elevatorTestUP);
+    controller.getB().whileTrue(elevatorTestOFF);
+
+  
+
     cam.setDefaultCommand(
       new RunCommand(() -> cam.updatesd(), cam)
     );
     
     sd.setDefaultCommand(
       new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(flightcont.getJoyX(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
-        true, 
+        -MathUtil.applyDeadband(controller.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(controller.getLeftY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(controller.getRightX(), OperatorConstants.DEADBAND), 
+        false, 
         true, 
         true)
       ,sd)
     );
 
 
-    XboxController.getX().whileTrue(endEffectorGrab);
-    XboxController.getY().whileTrue(endEffectorDrop);
-    XboxController.getRightBumper().whileTrue(cageClimberClimb);
-    XboxController.getLeftBumper().whileTrue(cageClimberDrop);
+
+    controller.getLeftBumper().whileTrue(endEffectorGrab);
+    controller.getRightBumper().whileTrue(endEffectorReverse);
+
+    controller.getRightTrigger().whileTrue(new RunCommand(() -> sd.drive(
+        -MathUtil.applyDeadband(controller.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(controller.getLeftY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(controller.getRightX(), OperatorConstants.DEADBAND), 
+        true, 
+        true, 
+        true)
+      ,sd));
+
+
+    controller.getRightTrigger().whileTrue(lowerCommand);
+    controller.getLeftTrigger().whileTrue(climbC
   }
 
   private void configureSubsystemCommands() {
@@ -100,7 +150,7 @@ public class RobotContainer {
   }
 
   private void configureSwerveDriveCommands() {
-    flightcont.getButton2()
+    controller.getRightStick()
         .whileTrue(
             new RunCommand(
                 () -> sd.zeroHeading(),
