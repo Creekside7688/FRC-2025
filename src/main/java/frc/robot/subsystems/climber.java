@@ -21,12 +21,12 @@ public class climber extends SubsystemBase {
 
   public void open()
   {
-    rightMotor.set(ControlMode.PercentOutput, 1);
+    rightMotor.set(ControlMode.PercentOutput, 0.4);
   }
 
   public void close()
   {
-    rightMotor.set(ControlMode.PercentOutput, -1);
+    rightMotor.set(ControlMode.PercentOutput, -0.4);
   }
 
   public void stop()

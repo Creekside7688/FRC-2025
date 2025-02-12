@@ -47,7 +47,7 @@ public class ElevatorTestSubsystem extends SubsystemBase {
   }
 
   public void spinDown() {
-    motor.set(-ElevatorTestConstants.SPEED);
+    motor.set(-0.2);
   }
 
   public void stop() {

@@ -6,14 +6,15 @@ package frc.robot;
 
 import frc.robot.constants.OperatorConstants;
 import frc.robot.commands.Autos;
-
-
+import frc.robot.commands.CageClimberClimb;
+import frc.robot.commands.CageClimberDrop;
 import frc.robot.commands.ElevatorTestOFF;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
 import frc.robot.commands.ElevatorTestDOWN;
 import frc.robot.commands.ElevatorTestUP;
 import frc.robot.commands.ElevatorTestOFF;
+import frc.robot.subsystems.CageClimber;
 import frc.robot.subsystems.ElevatorTestSubsystem;
 
 
@@ -23,13 +24,14 @@ import frc.robot.commands.EndEffectorReverse;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
 import frc.robot.commands.TriggerTest;
-import frc.robot.subsystems.CageClimber;
+import frc.robot.commands.cimb;
+import frc.robot.commands.lower;
 import frc.robot.subsystems.EndEffector;
 
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
-
+import frc.robot.subsystems.climber;
 import frc.lib.Controller;
 import frc.lib.FlightControl;
 
@@ -41,9 +43,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.climber;
-import frc.robot.commands.cimb;
-import frc.robot.commands.lower;;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -57,21 +57,19 @@ public class RobotContainer {
   private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
 
-  private final Controller XboxController = new Controller(0);
+  private final Controller controller = new Controller(1);
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
-  private final CageClimber cageClimber = new CageClimber();
-  private final CageClimberClimb cageClimberClimb = new CageClimberClimb(cageClimber);
-  private final CageClimberDrop cageClimberDrop = new CageClimberDrop(cageClimber);
+
 
   private final Limelight cam =  new Limelight();
-  private final FlightControl flightcont = new FlightControl(1);
+  private final FlightControl flightcont = new FlightControl(0);
+  /*private final climber clmber = new climber();
+  private final lower lwer = new lower(clmber);
+  private final cimb clmb = new cimb(clmber);*/
 
-
-  private final climber clmber = new climber();
-  private final cimb climbCommand = new cimb(clmber);
-  private final lower lowerCommand = new lower(clmber);
+  
 
 
   private final TriggerTest tt = new TriggerTest();
@@ -82,6 +80,9 @@ public class RobotContainer {
   private final ElevatorTestUP elevatorTestUP = new ElevatorTestUP(m_ElevatorTestSubsystem);
   private final ElevatorTestDOWN elevatorTestDOWN = new ElevatorTestDOWN(m_ElevatorTestSubsystem);
 
+  private final CageClimber cageClimber = new CageClimber();
+  private final CageClimberClimb climb = new CageClimberClimb(cageClimber);
+  private final CageClimberDrop drop = new CageClimberDrop(cageClimber);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -104,8 +105,8 @@ public class RobotContainer {
   private void configureBindings() {
 
 
-    controller.getX().whileTrue(elevatorTestDOWN);
-    controller.getY().whileTrue(elevatorTestUP);
+    controller.getX().whileTrue(elevatorTestUP);
+    controller.getY().whileTrue(elevatorTestDOWN);
     controller.getB().whileTrue(elevatorTestOFF);
 
   
@@ -113,7 +114,7 @@ public class RobotContainer {
     cam.setDefaultCommand(
       new RunCommand(() -> cam.updatesd(), cam)
     );
-    
+
     sd.setDefaultCommand(
       new RunCommand(() -> sd.drive(
         -MathUtil.applyDeadband(controller.getLeftX() * -1, OperatorConstants.DEADBAND), 
@@ -127,8 +128,12 @@ public class RobotContainer {
 
 
 
+
     controller.getLeftBumper().whileTrue(endEffectorGrab);
-    controller.getRightBumper().whileTrue(endEffectorReverse);
+    controller.getRightBumper().whileTrue(endEffectorDrop);
+    //controller.getLeftBumper().whileTrue(climb);
+    //controller.getRightBumper().whileTrue(drop);
+
 
     controller.getRightTrigger().whileTrue(new RunCommand(() -> sd.drive(
         -MathUtil.applyDeadband(controller.getLeftX() * -1, OperatorConstants.DEADBAND), 
@@ -140,8 +145,7 @@ public class RobotContainer {
       ,sd));
 
 
-    controller.getRightTrigger().whileTrue(lowerCommand);
-    controller.getLeftTrigger().whileTrue(climbC
+    
   }
 
   private void configureSubsystemCommands() {
