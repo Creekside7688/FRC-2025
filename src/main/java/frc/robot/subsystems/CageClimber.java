@@ -6,12 +6,14 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.CageClimberConstants;
 import frc.robot.constants.EndEffectorConstants;
@@ -24,6 +26,9 @@ public class CageClimber extends SubsystemBase {
     /** Creates a new Climber. */
     public CageClimber() {
       LeftMotor.follow(RightMotor);
+      LeftMotor.setNeutralMode(NeutralMode.Brake);
+      RightMotor.setNeutralMode(NeutralMode.Brake);
+    
     }
    public void run(double speed) {
       RightMotor.set(ControlMode.PercentOutput, speed);
@@ -46,6 +51,8 @@ public class CageClimber extends SubsystemBase {
   }
   @Override
   public void periodic() {
+   SmartDashboard.putBoolean("sensordetect1", sensor1detect());
+   SmartDashboard.putBoolean("sensordetect2", sensor2detect());
     // This method will be called once per scheduler run
   }
 }

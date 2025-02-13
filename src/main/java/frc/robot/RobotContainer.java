@@ -24,8 +24,7 @@ import frc.robot.commands.EndEffectorReverse;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
 import frc.robot.commands.TriggerTest;
-import frc.robot.commands.cimb;
-import frc.robot.commands.lower;
+
 import frc.robot.subsystems.EndEffector;
 
 import frc.robot.subsystems.ExampleSubsystem;
@@ -58,6 +57,7 @@ public class RobotContainer {
   private final SwerveDrive sd = new SwerveDrive();
 
   private final Controller controller = new Controller(1);
+  private final Controller teoController = new Controller(2);
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
@@ -88,7 +88,9 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     CameraServer.startAutomaticCapture();
-    configureBindings();
+    configureControllerBindings();
+    //configureJoystickBindings();
+    configureOperatorBindings();
     //configureSubsystemCommands();
     configureSwerveDriveCommands();
   }
@@ -102,12 +104,12 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
+  private void configureControllerBindings() {
 
 
-    controller.getX().whileTrue(elevatorTestUP);
-    controller.getY().whileTrue(elevatorTestDOWN);
-    controller.getB().whileTrue(elevatorTestOFF);
+    //controller.getX().whileTrue(elevatorTestUP);
+    //controller.getY().whileTrue(elevatorTestDOWN);
+    //controller.getB().whileTrue(elevatorTestOFF);
 
   
 
@@ -115,11 +117,12 @@ public class RobotContainer {
       new RunCommand(() -> cam.updatesd(), cam)
     );
 
+    
     sd.setDefaultCommand(
       new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(controller.getLeftX() * -1, OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(controller.getLeftY(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(controller.getRightX(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getRightX(), OperatorConstants.DEADBAND), 
         false, 
         true, 
         true)
@@ -129,16 +132,16 @@ public class RobotContainer {
 
 
 
-    controller.getLeftBumper().whileTrue(endEffectorGrab);
-    controller.getRightBumper().whileTrue(endEffectorDrop);
+    //controller.getLeftBumper().whileTrue(endEffectorGrab);
+    //controller.getRightBumper().whileTrue(endEffectorDrop);
     //controller.getLeftBumper().whileTrue(climb);
     //controller.getRightBumper().whileTrue(drop);
 
 
-    controller.getRightTrigger().whileTrue(new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(controller.getLeftX() * -1, OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(controller.getLeftY(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(controller.getRightX(), OperatorConstants.DEADBAND), 
+    teoController.getRightTrigger().whileTrue(new RunCommand(() -> sd.drive(
+        -MathUtil.applyDeadband(teoController.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getRightX(), OperatorConstants.DEADBAND), 
         true, 
         true, 
         true)
@@ -148,10 +151,38 @@ public class RobotContainer {
     
   }
 
-  private void configureSubsystemCommands() {
-    flightcont.getButton2().whileTrue(tt);
+  public void configureJoystickBindings(){
+     
+    sd.setDefaultCommand(
+      new RunCommand(() -> sd.drive(
+        -MathUtil.applyDeadband(flightcont.getJoyX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
+        false, 
+        true, 
+        true)
+      ,sd)
+    );
 
+
+
+    flightcont.getButton1().whileTrue(new RunCommand(() -> sd.drive(
+        -MathUtil.applyDeadband(flightcont.getJoyX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
+        true, 
+        true, 
+        true)
+      ,sd));
   }
+
+
+  public void configureOperatorBindings(){
+    controller.getLeftBumper().whileTrue(climb);
+    controller.getRightBumper().whileTrue(drop);
+  }
+
+
 
   private void configureSwerveDriveCommands() {
     controller.getRightStick()

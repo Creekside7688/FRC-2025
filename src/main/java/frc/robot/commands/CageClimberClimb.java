@@ -22,7 +22,7 @@ public class CageClimberClimb extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    cageClimber.run(CageClimberConstants.CAGE_CLIMBER_MOTOR_SPEED);
+    cageClimber.run(CageClimberConstants.CAGE_CLIMBER_MOTOR_SPEED_INVERTED);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,6 +37,6 @@ public class CageClimberClimb extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false; //CageClimber.sensor1detect(); 
+    return cageClimber.sensor2detect(); 
   }
 }
