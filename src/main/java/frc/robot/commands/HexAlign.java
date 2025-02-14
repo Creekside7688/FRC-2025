@@ -95,18 +95,7 @@ public class HexAlign extends Command {
 
       swerveDrive.drive(0,  0 , 0, true, false, true);
       
-      /*if (targetYaw < -8) {
-        while (Math.abs(limelight.TargetYaw()) > 8) {
           swerveDrive.drive(0,  1 , 0, true, false, true);
-        }
-      } else if (targetYaw > 8) {
-        while (Math.abs(limelight.TargetYaw()) > 8) {
-          swerveDrive.drive(0,  -1 , 0, true, false, true);
-        }
-      } else {
-        swerveDrive.drive(0,  0 , 0, true, false, true);
-      }*/
-      
 
     } else {
       SmartDashboard.putBoolean("HexRun", false);
@@ -122,15 +111,34 @@ public class HexAlign extends Command {
       finished = true;
     } else {
       targetYaw = limelight.TargetYaw();
-      if (targetYaw < -8) {
-        swerveDrive.drive(1, 0, 1, true, false, true);
-      } else if (targetYaw > 8) {
-        swerveDrive.drive(1, 0, -1, true, false, true);
- 
-      } else {
-        swerveDrive.drive(1, 0, 0, true, false, true);
 
+      rotate = (Math.abs(targetYaw)+8)/ApriltagConstants.RotateControl;
+      strafe = (Math.abs(targetYaw)-5)/ApriltagConstants.StrafeControl;
+      if (strafe < 0) {
+        strafe = 0;
       }
+
+      if (strafe > 1) {
+        strafe = 1;
+      }
+      
+      if (rotate > 1) {
+        rotate = 0.1;
+      }
+
+      if (targetYaw > 0) {
+        rotate = -rotate;
+        strafe = -strafe;
+      }
+
+      forward = 1;
+
+      forward = forward * ApriltagConstants.SpeedControl;
+      rotate = rotate * ApriltagConstants.SpeedControl;
+      strafe = strafe * ApriltagConstants.SpeedControl;
+
+
+      swerveDrive.drive(forward, rotate, strafe, false, false, true);
       
       
       targetRange = (PhotonUtils.calculateDistanceToTargetMeters(

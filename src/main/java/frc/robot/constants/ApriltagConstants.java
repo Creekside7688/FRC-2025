@@ -19,4 +19,8 @@ public class ApriltagConstants {
     public static final double CameraTurnGain = 0.01;
     public static final double CameraTagRange = 2.0; //meters
     public static final double RobotStrafeGain = 0.02;
+
+    public static final double SpeedControl = 0.5;
+    public static final double RotateControl = 20;
+    public static final double StrafeControl = 10;
 }
