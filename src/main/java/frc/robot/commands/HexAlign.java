@@ -95,7 +95,6 @@ public class HexAlign extends Command {
 
       swerveDrive.drive(0,  0 , 0, true, false, true);
       
-          swerveDrive.drive(0,  1 , 0, true, false, true);
 
     } else {
       SmartDashboard.putBoolean("HexRun", false);
