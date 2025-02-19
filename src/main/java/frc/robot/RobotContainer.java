@@ -9,7 +9,7 @@ import frc.robot.commands.Autos;
 
 import frc.robot.commands.ElevatorTestOFF;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.HexAlign;
+import frc.robot.commands.HexAlignLeft;
 import frc.robot.commands.ElevatorTestDOWN;
 import frc.robot.commands.ElevatorTestUP;
 import frc.robot.commands.ElevatorTestOFF;
@@ -19,7 +19,7 @@ import frc.robot.commands.EndEffectorDrop;
 import frc.robot.commands.EndEffectorGrab;
 import frc.robot.commands.EndEffectorReverse;
 import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.HexAlign;
+import frc.robot.commands.HexAlignLeft;
 import frc.robot.commands.TriggerTest;
 import frc.robot.subsystems.EndEffector;
 
@@ -69,7 +69,7 @@ public class RobotContainer {
 
   private final TriggerTest tt = new TriggerTest();
 
-  private final HexAlign hexalign = new HexAlign(cam, sd);
+  private final HexAlignLeft hexalignleft = new HexAlignLeft(cam, sd);
 
   private final ElevatorTestOFF elevatorTestOFF = new ElevatorTestOFF(m_ElevatorTestSubsystem);
   private final ElevatorTestUP elevatorTestUP = new ElevatorTestUP(m_ElevatorTestSubsystem);
@@ -138,7 +138,7 @@ public class RobotContainer {
 
   private void configureSubsystemCommands() {
     flightcont.getButton2().whileTrue(tt);
-    flightcont.getButton1().whileTrue(hexalign);
+    flightcont.getButton1().whileTrue(hexalignleft);
 
   }
 
