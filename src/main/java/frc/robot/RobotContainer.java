@@ -56,15 +56,15 @@ public class RobotContainer {
   private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
 
-  private final Controller controller = new Controller(1);
-  private final Controller teoController = new Controller(2);
+  private final Controller controller = new Controller(0);
+  private final Controller teoController = new Controller(1);
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
 
 
   private final Limelight cam =  new Limelight();
-  private final FlightControl flightcont = new FlightControl(0);
+  private final FlightControl flightcont = new FlightControl(3);
   /*private final climber clmber = new climber();
   private final lower lwer = new lower(clmber);
   private final cimb clmb = new cimb(clmber);*/
