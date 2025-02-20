@@ -178,8 +178,18 @@ public class RobotContainer {
 
 
   public void configureOperatorBindings(){
+    //climber commands
     controller.getLeftBumper().whileTrue(climb);
     controller.getRightBumper().whileTrue(drop);
+    
+    //elevator commands
+    controller.getY().whileTrue(elevatorTestUP);
+    controller.getX().whileTrue(elevatorTestDOWN);
+    controller.getB().whileTrue(elevatorTestOFF);
+
+    //end effector commands
+    controller.getLeftTrigger().whileTrue(endEffectorGrab);
+    controller.getRightTrigger().whileTrue(endEffectorDrop);
   }
 
 
