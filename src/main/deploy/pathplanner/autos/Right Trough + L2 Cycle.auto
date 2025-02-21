@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "BargeRightHex Trough Score"
+            "name": "Trough Score"
           }
         },
         {
@@ -37,7 +37,7 @@
         {
           "type": "named",
           "data": {
-            "name": "StationLeftHex L2 Score"
+            "name": "L2 Score"
           }
         }
       ]
