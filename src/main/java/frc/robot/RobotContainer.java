@@ -44,6 +44,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -85,15 +87,31 @@ public class RobotContainer {
   private final CageClimberClimb climb = new CageClimberClimb(cageClimber);
   private final CageClimberDrop drop = new CageClimberDrop(cageClimber);
 
+  SendableChooser<Command> autoSelector = new SendableChooser<>();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     CameraServer.startAutomaticCapture();
 
-    NamedCommands.registerCommand("BargeRightHex Trough Score");
-    NamedCommands.registerCommand("Coral Human Pickup");
-    NamedCommands.registerCommand("StationLeftHex Trough Score");
-    NamedCommands.registerCommand("StationLeftHex L2 Score");
+    NamedCommands.registerCommand("BargeRightHex Trough Score",endEffectorDrop);
+    NamedCommands.registerCommand("Coral Human Pickup",endEffectorGrab);
+    NamedCommands.registerCommand("StationLeftHex Trough Score",endEffectorDrop);
+    NamedCommands.registerCommand("StationLeftHex L2 Score",endEffectorDrop);
+    NamedCommands.registerCommand("BargeRightHex L2 Score",endEffectorDrop);
+
+    autoSelector.addOption("Left Trough Cycle x2", new PathPlannerAuto("Left Trough Cycle x2"));
+    autoSelector.addOption("Right Trough + L2 Cycle", new PathPlannerAuto("Right Trough + L2 Cycle"));
+    autoSelector.setDefaultOption("Right Trough Cycle x2", new PathPlannerAuto("Right Trough Cycle x2"));
+
+    autoSelector.addOption("Left Trough + L2 Cycle", new PathPlannerAuto("Right Trough + L2 Cycle"));
+    autoSelector.addOption("Left L2 Cycle x2", new PathPlannerAuto("Right Trough + L2 Cycle"));
+    autoSelector.addOption("Right L2 Cycle x2", new PathPlannerAuto("Right Trough + L2 Cycle"));
+
+    autoSelector.addOption("Middle L2 Cycle", new PathPlannerAuto("Middle L2 Cycle"));
+    autoSelector.addOption("Middle Trough Cycle", new PathPlannerAuto("Middle Trough Cycle"));
+
+    SmartDashboard.putData("Autonomous Path", autoSelector);
 
     configureControllerBindings();
     //configureJoystickBindings();
@@ -224,6 +242,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return Autos.exampleAuto(m_exampleSubsystem);
-    return new PathPlannerAuto("");
+    return autoSelector.getSelected();
   }
 }
