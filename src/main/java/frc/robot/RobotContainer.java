@@ -205,6 +205,10 @@ public class RobotContainer {
 
     flightcont.getButton3().whileTrue(new RunCommand(() -> sd.lockPosition(), sd));
 
+
+    flightcont.getButton(4).onTrue(new RunCommand(() -> sd.zeroHeading(), sd));
+    flightcont.getButton(5).onTrue(new RunCommand(() -> sd.lockPosition(), sd));
+
 }
 
   
