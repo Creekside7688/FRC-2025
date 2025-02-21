@@ -35,6 +35,7 @@ import frc.lib.Controller;
 import frc.lib.FlightControl;
 
 import java.util.PrimitiveIterator;
+import java.util.jar.Attributes.Name;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
@@ -88,6 +89,12 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     CameraServer.startAutomaticCapture();
+
+    NamedCommands.registerCommand("BargeRightHex Trough Score");
+    NamedCommands.registerCommand("Coral Human Pickup");
+    NamedCommands.registerCommand("StationLeftHex Trough Score");
+    NamedCommands.registerCommand("StationLeftHex L2 Score");
+
     configureControllerBindings();
     //configureJoystickBindings();
     configureOperatorBindings();
@@ -206,6 +213,7 @@ public class RobotContainer {
     flightcont.getButton3().whileTrue(new RunCommand(() -> sd.lockPosition(), sd));
 
 }
+ 
 
   
   /**
@@ -215,6 +223,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    // return Autos.exampleAuto(m_exampleSubsystem);
+    return new PathPlannerAuto("");
   }
 }
