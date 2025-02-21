@@ -37,8 +37,14 @@ import frc.lib.FlightControl;
 import java.util.PrimitiveIterator;
 import java.util.jar.Attributes.Name;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -52,8 +58,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
 
@@ -70,6 +74,8 @@ public class RobotContainer {
   private final lower lwer = new lower(clmber);
   private final cimb clmb = new cimb(clmber);*/
 
+  private final Command endEffectorAutoCommand = new EndEffectorDrop(endEffector).withTimeout(0.5);
+  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("Center Test Routine");;
   
 
 
@@ -90,16 +96,17 @@ public class RobotContainer {
     // Configure the trigger bindings
     CameraServer.startAutomaticCapture();
 
-    NamedCommands.registerCommand("BargeRightHex Trough Score");
-    NamedCommands.registerCommand("Coral Human Pickup");
-    NamedCommands.registerCommand("StationLeftHex Trough Score");
-    NamedCommands.registerCommand("StationLeftHex L2 Score");
+    NamedCommands.registerCommand("Trough Score", endEffectorAutoCommand);
 
+    configureAutonomous();
     configureControllerBindings();
-    //configureJoystickBindings();
     configureOperatorBindings();
-    //configureSubsystemCommands();
     configureSwerveDriveCommands();
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+  }
+
+  private void configureAutonomous() {
   }
 
   /**
@@ -224,6 +231,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return Autos.exampleAuto(m_exampleSubsystem);
-    return new PathPlannerAuto("");
+    return autoChooser.getSelected();
   }
 }
