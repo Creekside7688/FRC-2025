@@ -5,38 +5,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.EndEffectorConstants;
-import frc.robot.subsystems.EndEffector;
+import frc.robot.subsystems.climber;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class EndEffectorGrab extends Command {
-  /** Creates a new EndEffectorGrab. */
-  private final EndEffector endEffector;
-
-  public EndEffectorGrab(EndEffector endEffector) {
-    this.endEffector = endEffector;
-    addRequirements(endEffector);
+public class cimb extends Command {
+  /** Creates a new cimb. */
+  private final climber subClimber;
+  public cimb(climber inputClimber) {
+    subClimber = inputClimber;
+    addRequirements(subClimber);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    endEffector.run(EndEffectorConstants.END_EFFECTOR_MOTOR_SPEED);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    subClimber.open();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    endEffector.run(0);
+    subClimber.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return endEffector.sensordetectinverted();
+    return false;
   }
 }

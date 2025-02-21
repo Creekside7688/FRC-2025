@@ -5,23 +5,24 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.CageClimberConstants;
 import frc.robot.constants.EndEffectorConstants;
-import frc.robot.subsystems.EndEffector;
+import frc.robot.subsystems.CageClimber;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class EndEffectorGrab extends Command {
-  /** Creates a new EndEffectorGrab. */
-  private final EndEffector endEffector;
-
-  public EndEffectorGrab(EndEffector endEffector) {
-    this.endEffector = endEffector;
-    addRequirements(endEffector);
+public class CageClimberDrop extends Command {
+  private final CageClimber cageClimber;
+  /** Creates a new CageClimberClimb. */
+  public CageClimberDrop(CageClimber cageClimber) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.cageClimber = cageClimber;
+    addRequirements(cageClimber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    endEffector.run(EndEffectorConstants.END_EFFECTOR_MOTOR_SPEED);
+    cageClimber.run(CageClimberConstants.CAGE_CLIMBER_MOTOR_SPEED);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,12 +32,11 @@ public class EndEffectorGrab extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    endEffector.run(0);
+    cageClimber.run(0);
   }
-
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return endEffector.sensordetectinverted();
+    return cageClimber.sensor1detect();
   }
 }

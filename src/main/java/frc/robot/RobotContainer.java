@@ -6,26 +6,31 @@ package frc.robot;
 
 import frc.robot.constants.OperatorConstants;
 import frc.robot.commands.Autos;
-
+import frc.robot.commands.CageClimberClimb;
+import frc.robot.commands.CageClimberDrop;
 import frc.robot.commands.ElevatorTestOFF;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
 import frc.robot.commands.ElevatorTestDOWN;
 import frc.robot.commands.ElevatorTestUP;
 import frc.robot.commands.ElevatorTestOFF;
+import frc.robot.subsystems.CageClimber;
 import frc.robot.subsystems.ElevatorTestSubsystem;
+
 
 import frc.robot.commands.EndEffectorDrop;
 import frc.robot.commands.EndEffectorGrab;
+import frc.robot.commands.EndEffectorReverse;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
 import frc.robot.commands.TriggerTest;
+
 import frc.robot.subsystems.EndEffector;
 
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
-
+import frc.robot.subsystems.climber;
 import frc.lib.Controller;
 import frc.lib.FlightControl;
 
@@ -38,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -49,12 +55,22 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
-  private final Controller controller = new Controller(1);
+
+  private final Controller controller = new Controller(0);
+  private final Controller teoController = new Controller(1);
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
+
+
   private final Limelight cam =  new Limelight();
-  private final FlightControl flightcont = new FlightControl(0);
+  private final FlightControl flightcont = new FlightControl(3);
+  /*private final climber clmber = new climber();
+  private final lower lwer = new lower(clmber);
+  private final cimb clmb = new cimb(clmber);*/
+
+  
+
 
   private final TriggerTest tt = new TriggerTest();
 
@@ -64,14 +80,19 @@ public class RobotContainer {
   private final ElevatorTestUP elevatorTestUP = new ElevatorTestUP(m_ElevatorTestSubsystem);
   private final ElevatorTestDOWN elevatorTestDOWN = new ElevatorTestDOWN(m_ElevatorTestSubsystem);
 
+  private final CageClimber cageClimber = new CageClimber();
+  private final CageClimberClimb climb = new CageClimberClimb(cageClimber);
+  private final CageClimberDrop drop = new CageClimberDrop(cageClimber);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     CameraServer.startAutomaticCapture();
-    configureBindings();
+    configureControllerBindings();
+    //configureJoystickBindings();
+    configureOperatorBindings();
     //configureSubsystemCommands();
-    //configureSwerveDriveCommands();
+    configureSwerveDriveCommands();
   }
 
   /**
@@ -83,43 +104,98 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
+  private void configureControllerBindings() {
 
 
-    controller.getX().whileTrue(elevatorTestDOWN);
-    controller.getY().whileTrue(elevatorTestUP);
-    controller.getB().whileTrue(elevatorTestOFF);
+    //controller.getX().whileTrue(elevatorTestUP);
+    //controller.getY().whileTrue(elevatorTestDOWN);
+    //controller.getB().whileTrue(elevatorTestOFF);
 
   
 
     cam.setDefaultCommand(
       new RunCommand(() -> cam.updatesd(), cam)
     );
+
     
     sd.setDefaultCommand(
       new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(controller.getLeftX() * -1, OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(controller.getLeftY(), OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(controller.getRightX(), OperatorConstants.DEADBAND), 
-        true, 
+        -MathUtil.applyDeadband(teoController.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getRightX(), OperatorConstants.DEADBAND), 
+        false, 
         true, 
         true)
       ,sd)
     );
 
 
-    controller.getLeftBumper().whileTrue(endEffectorGrab);
-    controller.getRightBumper().whileTrue(endEffectorDrop);
 
+
+    //controller.getLeftBumper().whileTrue(endEffectorGrab);
+    //controller.getRightBumper().whileTrue(endEffectorDrop);
+    //controller.getLeftBumper().whileTrue(climb);
+    //controller.getRightBumper().whileTrue(drop);
+
+
+    teoController.getRightTrigger().whileTrue(new RunCommand(() -> sd.drive(
+        -MathUtil.applyDeadband(teoController.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getRightX(), OperatorConstants.DEADBAND), 
+        true, 
+        true, 
+        true)
+      ,sd));
+
+
+    
   }
 
-  private void configureSubsystemCommands() {
-    flightcont.getButton2().whileTrue(tt);
+  public void configureJoystickBindings(){
+     
+    sd.setDefaultCommand(
+      new RunCommand(() -> sd.drive(
+        -MathUtil.applyDeadband(flightcont.getJoyX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
+        false, 
+        true, 
+        true)
+      ,sd)
+    );
 
+
+
+    flightcont.getButton1().whileTrue(new RunCommand(() -> sd.drive(
+        -MathUtil.applyDeadband(flightcont.getJoyX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
+        true, 
+        true, 
+        true)
+      ,sd));
   }
+
+
+  public void configureOperatorBindings(){
+    //climber commands
+    controller.getLeftBumper().whileTrue(climb);
+    controller.getRightBumper().whileTrue(drop);
+    
+    //elevator commands
+    controller.getY().whileTrue(elevatorTestUP);
+    controller.getX().whileTrue(elevatorTestDOWN);
+    controller.getB().whileTrue(elevatorTestOFF);
+
+    //end effector commands
+    controller.getLeftTrigger().whileTrue(endEffectorGrab);
+    controller.getRightTrigger().whileTrue(endEffectorDrop);
+  }
+
+
 
   private void configureSwerveDriveCommands() {
-    flightcont.getButton2()
+    controller.getRightStick()
         .whileTrue(
             new RunCommand(
                 () -> sd.zeroHeading(),

@@ -9,11 +9,11 @@ import frc.robot.constants.EndEffectorConstants;
 import frc.robot.subsystems.EndEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class EndEffectorGrab extends Command {
+public class EndEffectorReverse extends Command {
   /** Creates a new EndEffectorGrab. */
   private final EndEffector endEffector;
 
-  public EndEffectorGrab(EndEffector endEffector) {
+  public EndEffectorReverse(EndEffector endEffector) {
     this.endEffector = endEffector;
     addRequirements(endEffector);
   }
@@ -21,7 +21,7 @@ public class EndEffectorGrab extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    endEffector.run(EndEffectorConstants.END_EFFECTOR_MOTOR_SPEED);
+    endEffector.run(EndEffectorConstants.END_EFFECTOR_MOTOR_SPEED_REVERSED);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,6 +37,6 @@ public class EndEffectorGrab extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return endEffector.sensordetectinverted();
+    return false;
   }
 }
