@@ -55,6 +55,10 @@ public class FlightControl {
         return button3;
     }
 
+    public Trigger getButton(int button) {
+        return new JoystickButton(joystick, button);
+    }
+
 
    
    

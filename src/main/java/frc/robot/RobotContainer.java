@@ -63,8 +63,8 @@ public class RobotContainer {
   private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
   private final SwerveDrive sd = new SwerveDrive();
 
-  private final Controller controller = new Controller(0);
-  private final Controller teoController = new Controller(1);
+  private final Controller controller = new Controller(1);
+  private final Controller teoController = new Controller(0);
   private final EndEffector endEffector = new EndEffector();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
@@ -239,6 +239,10 @@ public class RobotContainer {
         );
 
     flightcont.getButton3().whileTrue(new RunCommand(() -> sd.lockPosition(), sd));
+
+
+    flightcont.getButton(4).onTrue(new RunCommand(() -> sd.zeroHeading(), sd));
+    flightcont.getButton(5).onTrue(new RunCommand(() -> sd.lockPosition(), sd));
 
 }
  
