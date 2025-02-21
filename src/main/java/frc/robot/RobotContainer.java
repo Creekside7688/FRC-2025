@@ -100,11 +100,12 @@ public class RobotContainer {
     // Configure the trigger bindings
     CameraServer.startAutomaticCapture();
 
-    NamedCommands.registerCommand("BargeRightHex Trough Score",endEffectorDrop);
-    NamedCommands.registerCommand("Coral Human Pickup",endEffectorGrab);
-    NamedCommands.registerCommand("StationLeftHex Trough Score",endEffectorDrop);
-    NamedCommands.registerCommand("StationLeftHex L2 Score",endEffectorDrop);
-    NamedCommands.registerCommand("BargeRightHex L2 Score",endEffectorDrop);
+    NamedCommands.registerCommand("BargeRightHex Trough Score", endEffectorDrop);
+    NamedCommands.registerCommand("Coral Human Pickup", endEffectorGrab);
+    NamedCommands.registerCommand("StationLeftHex Trough Score", endEffectorDrop);
+    NamedCommands.registerCommand("StationLeftHex L2 Score", endEffectorDrop);
+    NamedCommands.registerCommand("BargeRightHex L2 Score", endEffectorDrop);
+    NamedCommands.registerCommand("Trough Score", new EndEffectorDrop(endEffector));
 
     autoSelector.addOption("Left Trough Cycle x2", new PathPlannerAuto("Left Trough Cycle x2"));
     autoSelector.addOption("Right Trough + L2 Cycle", new PathPlannerAuto("Right Trough + L2 Cycle"));
