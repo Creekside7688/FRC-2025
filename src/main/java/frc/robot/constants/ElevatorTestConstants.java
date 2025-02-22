@@ -6,6 +6,6 @@ package frc.robot.constants;
 
 /** Add your docs here. */
 public class ElevatorTestConstants {
-    public static final int MOTOR_ID = 10;
+    public static final int MOTOR_ID = 15;
     public static final double SPEED = 0.80;
 }

@@ -21,7 +21,8 @@ import frc.robot.constants.EndEffectorConstants;
 public class CageClimber extends SubsystemBase {
   private final TalonSRX LeftMotor = new TalonSRX(1);
   private final TalonSRX RightMotor = new TalonSRX(2);
-  private final  DigitalInput sensor1 = new DigitalInput(0);
+
+    private final  DigitalInput sensor1 = new DigitalInput(0);
      private final DigitalInput sensor2 = new DigitalInput(1);
     /** Creates a new Climber. */
     public CageClimber() {

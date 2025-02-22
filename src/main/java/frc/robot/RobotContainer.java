@@ -4,10 +4,12 @@
 
 package frc.robot;
 
+import frc.robot.constants.ElevatorConstants;
 import frc.robot.constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.CageClimberClimb;
 import frc.robot.commands.CageClimberDrop;
+import frc.robot.commands.DealgerDown;
 import frc.robot.commands.ElevatorTestOFF;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
@@ -15,6 +17,8 @@ import frc.robot.commands.ElevatorTestDOWN;
 import frc.robot.commands.ElevatorTestUP;
 import frc.robot.commands.ElevatorTestOFF;
 import frc.robot.subsystems.CageClimber;
+import frc.robot.subsystems.Dealger;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.ElevatorTestSubsystem;
 
 
@@ -39,6 +43,7 @@ import java.util.PrimitiveIterator;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -53,15 +58,17 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
+  //private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new ElevatorTestSubsystem();
+  private final Elevator elevator = new Elevator();
   private final SwerveDrive sd = new SwerveDrive();
 
   private final Controller controller = new Controller(1);
-  private final Controller teoController = new Controller(0);
+  private final Controller teoController = new Controller(2);
   private final EndEffector endEffector = new EndEffector();
+  //private final Dealger dealger = new Dealger();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
-
+  //private final DealgerDown dealgerdown = new DealgerDown(dealger);
 
   private final Limelight cam =  new Limelight();
   private final FlightControl flightcont = new FlightControl(3);
@@ -76,9 +83,9 @@ public class RobotContainer {
 
   private final HexAlign hexalign = new HexAlign(cam, sd);
 
-  private final ElevatorTestOFF elevatorTestOFF = new ElevatorTestOFF(m_ElevatorTestSubsystem);
-  private final ElevatorTestUP elevatorTestUP = new ElevatorTestUP(m_ElevatorTestSubsystem);
-  private final ElevatorTestDOWN elevatorTestDOWN = new ElevatorTestDOWN(m_ElevatorTestSubsystem);
+  //private final ElevatorTestOFF elevatorTestOFF = new ElevatorTestOFF(m_ElevatorTestSubsystem);
+  //private final ElevatorTestUP elevatorTestUP = new ElevatorTestUP(m_ElevatorTestSubsystem);
+  //private final ElevatorTestDOWN elevatorTestDOWN = new ElevatorTestDOWN(m_ElevatorTestSubsystem);
 
   private final CageClimber cageClimber = new CageClimber();
   private final CageClimberClimb climb = new CageClimberClimb(cageClimber);
@@ -95,10 +102,12 @@ public class RobotContainer {
     configureSwerveDriveCommands();
   }
 
+
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
+   * 
    * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
    * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
@@ -183,13 +192,36 @@ public class RobotContainer {
     controller.getRightBumper().whileTrue(drop);
     
     //elevator commands
-    controller.getY().whileTrue(elevatorTestUP);
+    /*controller.getY().whileTrue(elevatorTestUP);
     controller.getX().whileTrue(elevatorTestDOWN);
-    controller.getB().whileTrue(elevatorTestOFF);
+    controller.getB().whileTrue(elevatorTestOFF);*/
+    
+    controller.getA().onTrue(
+      new InstantCommand(
+        () -> elevator.setTarget(ElevatorConstants.LEVEL_1_HEIGHT)
+      )
+    );
+
+    controller.getB().onTrue(
+      new InstantCommand(
+        () -> elevator.setTarget(ElevatorConstants.LEVEL_2_HEIGHT)
+      )
+    );
+
+    controller.getX().onTrue(
+      new InstantCommand(
+        () -> elevator.setTarget(ElevatorConstants.LEVEL_3_HEIGHT)
+      )
+    );
+    
+    //controller.getA().whileTrue(dealgerdown);
 
     //end effector commands
     controller.getLeftTrigger().whileTrue(endEffectorGrab);
     controller.getRightTrigger().whileTrue(endEffectorDrop);
+
+    
+
   }
 
 

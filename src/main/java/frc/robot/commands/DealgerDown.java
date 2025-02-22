@@ -5,24 +5,30 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.CageClimberConstants;
-import frc.robot.constants.EndEffectorConstants;
-import frc.robot.subsystems.CageClimber;
+import frc.robot.subsystems.Dealger;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CageClimberDrop extends Command {
-  private final CageClimber cageClimber;
-  /** Creates a new CageClimberClimb. */
-  public CageClimberDrop(CageClimber cageClimber) {
+
+
+public class DealgerDown extends Command {
+  boolean DealgerUp = true;
+  private final Dealger dealger;
+  /** Creates a new DealgerDown. */
+  public DealgerDown(Dealger dealger) {
+    this.dealger = dealger;
+    addRequirements(dealger);
     // Use addRequirements() here to declare subsystem dependencies.
-    this.cageClimber = cageClimber;
-    addRequirements(cageClimber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    cageClimber.run(CageClimberConstants.CAGE_CLIMBER_MOTOR_SPEED);
+    if (DealgerUp) {
+      dealger.Run(0.2);
+
+    } else {
+      dealger.Run(-0.2);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -32,11 +38,13 @@ public class CageClimberDrop extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cageClimber.run(0);
+    dealger.stop();
+    DealgerUp = !DealgerUp;
   }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return cageClimber.sensor2detect();
+    return false;
   }
 }

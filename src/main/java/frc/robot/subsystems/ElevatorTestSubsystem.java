@@ -31,7 +31,7 @@ public class ElevatorTestSubsystem extends SubsystemBase {
 
   /** Creates a new ElevatorTestSubsystem. */
   public ElevatorTestSubsystem() {
-    motor = new SparkMax(ElevatorTestConstants.MOTOR_ID, SparkMax.MotorType.kBrushless);
+    motor = new SparkMax(15, SparkMax.MotorType.kBrushless);
     motor.set(0);
 
     encoder = motor.getAlternateEncoder();
