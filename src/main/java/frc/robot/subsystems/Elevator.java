@@ -22,6 +22,7 @@ public class Elevator extends SubsystemBase {
 
     private double target; // Meters
     private DigitalInput sensor;
+    private boolean manual;
 
     private SparkMaxConfig config;
 
@@ -42,6 +43,8 @@ public class Elevator extends SubsystemBase {
         sensor = new DigitalInput(ElevatorConstants.SENSOR_CHANNEL);
 
         encoder.setPosition(0);
+
+        manual = false;
     }
 
     @Override
@@ -49,37 +52,45 @@ public class Elevator extends SubsystemBase {
         updateDashboard();
 
         if (atBottom()) {
-            //encoder.setPosition(0);
+            // encoder.setPosition(0);
         }
+
+        if (!manual) {
+            goToTarget();
+        }
+    }
+
+    public void goToTarget() {
 
         if (atTarget()) {
             motor.set(0);
         }
 
         else if ((target - encoder.getPosition()) > 0.1) {
-            motor.set(ElevatorConstants.SPEED);
+            motor.set(ElevatorConstants.AUTO_SPEED);
         }
 
         else if ((target - encoder.getPosition()) < 0.1) {
-            motor.set(-ElevatorConstants.SPEED);
+            motor.set(-ElevatorConstants.AUTO_SPEED);
         }
     }
 
     public void spinUp() {
-        motor.set(ElevatorConstants.SPEED);
+        motor.set(ElevatorConstants.MANUAL_SPEED);
     }
 
     public void spinDown() {
-        motor.set(-ElevatorConstants.SPEED);
+        motor.set(-ElevatorConstants.MANUAL_SPEED);
     }
 
     public void stop() {
         motor.set(0);
-        motor.stopMotor();
     }
 
     public void setTarget(double meters) {
         target = meters;
+        // setTarget calls mean auto mode should be enabled
+        manual = false;
     }
 
     public boolean atTarget() {
@@ -88,6 +99,10 @@ public class Elevator extends SubsystemBase {
 
     public boolean atBottom() {
         return !sensor.get(); // Invert with not to get true when at sensor is tripped
+    }
+
+    public void manualMode() {
+        manual = true;
     }
 
     public void updateDashboard() {

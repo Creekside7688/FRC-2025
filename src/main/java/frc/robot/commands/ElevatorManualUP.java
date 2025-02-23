@@ -5,33 +5,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ElevatorTestSubsystem;
+import frc.robot.subsystems.Elevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevatorTestOFF extends Command {
-  private ElevatorTestSubsystem m_elevatorTestSubsystem;
-  /** Creates a new ElevatorTestOFF. */
-  public ElevatorTestOFF(ElevatorTestSubsystem subsystem) {
-    m_elevatorTestSubsystem = subsystem;
-    addRequirements(m_elevatorTestSubsystem);
+public class ElevatorManualUP extends Command {
+  private Elevator elevator;
+
+  /** Creates a new ElevatorTestUP. */
+  public ElevatorManualUP(Elevator subsystem) {
+    elevator = subsystem;
+    addRequirements(elevator);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_elevatorTestSubsystem.stop();
+    elevator.manualMode();
+    elevator.spinUp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_elevatorTestSubsystem.updateDashboard();
+    elevator.updateDashboard();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+      elevator.stop();
+  }
 
   // Returns true when the command should end.
   @Override
