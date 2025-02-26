@@ -10,10 +10,12 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.CageClimberClimb;
 import frc.robot.commands.CageClimberDrop;
 import frc.robot.commands.DealgerDown;
+import frc.robot.commands.ElevatorTestOFF;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
-import frc.robot.commands.ElevatorManualUP;
-import frc.robot.commands.ElevatorManualDOWN;
+import frc.robot.commands.ElevatorTestDOWN;
+import frc.robot.commands.ElevatorTestUP;
+import frc.robot.commands.ElevatorTestOFF;
 import frc.robot.subsystems.CageClimber;
 import frc.robot.subsystems.Dealger;
 import frc.robot.subsystems.Elevator;
@@ -81,8 +83,9 @@ public class RobotContainer {
 
   private final HexAlign hexalign = new HexAlign(cam, sd);
 
-  private final ElevatorManualDOWN elevatorManualDOWN = new ElevatorManualDOWN(elevator);
-  private final ElevatorManualUP elevatorManualUP = new ElevatorManualUP(elevator);
+  //private final ElevatorTestOFF elevatorTestOFF = new ElevatorTestOFF(m_ElevatorTestSubsystem);
+  //private final ElevatorTestUP elevatorTestUP = new ElevatorTestUP(m_ElevatorTestSubsystem);
+  //private final ElevatorTestDOWN elevatorTestDOWN = new ElevatorTestDOWN(m_ElevatorTestSubsystem);
 
   private final CageClimber cageClimber = new CageClimber();
   private final CageClimberClimb climb = new CageClimberClimb(cageClimber);
@@ -210,9 +213,6 @@ public class RobotContainer {
         () -> elevator.setTarget(ElevatorConstants.LEVEL_3_HEIGHT)
       )
     );
-
-    controller.getRightStick().whileTrue(elevatorManualUP);
-    controller.getLeftStick().whileTrue(elevatorManualDOWN);
     
     //controller.getA().whileTrue(dealgerdown);
 

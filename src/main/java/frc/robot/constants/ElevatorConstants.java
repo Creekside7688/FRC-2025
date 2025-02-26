@@ -7,8 +7,7 @@ package frc.robot.constants;
 /** Add your docs here. */
 public class ElevatorConstants {
     public static final int MOTOR_ID = 10;
-    public static final double AUTO_SPEED = 0.5	;
-    public static final double MANUAL_SPEED = 0.5	;
+    public static final double SPEED = 0.5	;
 	public static final int SENSOR_CHANNEL = 8;
 
     // UNITS: ENCODER ROTATIONS
