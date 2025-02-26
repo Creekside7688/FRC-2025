@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DealgerConstants;
 
@@ -39,6 +40,7 @@ public class Dealger extends SubsystemBase {
     
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("algaer pos", getPosition());
     // This method will be called once per scheduler run
   }
 }

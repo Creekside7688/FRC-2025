@@ -69,6 +69,15 @@ public class Elevator extends SubsystemBase {
 
         if (atTarget()) {
             motor.set(0);
+            
+            if(target != 0)
+            {
+                motor.setVoltage(ElevatorConstants.STALL_VOLTAGE);
+            }
+            else
+            {
+                motor.setVoltage(0);
+            }
         }
 
         else if ((target - encoder.getPosition()) > 0.1) {

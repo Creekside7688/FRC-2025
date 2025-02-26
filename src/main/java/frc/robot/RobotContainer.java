@@ -45,6 +45,7 @@ import java.util.PrimitiveIterator;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -71,6 +72,7 @@ public class RobotContainer {
   private final Dealger dealger = new Dealger();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
+  private final EndEffectorReverse endEffectorReverse = new EndEffectorReverse(endEffector);
   private final DealgerDown dealgerdown = new DealgerDown(dealger);
   private final DealgerUp dealgerup = new DealgerUp(dealger);
 
@@ -195,6 +197,8 @@ public class RobotContainer {
 
 
   public void configureOperatorBindings(){
+   
+    
     //climber commands
     controller.getLeftBumper().whileTrue(climb);
     controller.getRightBumper().whileTrue(drop);
@@ -221,6 +225,14 @@ public class RobotContainer {
         () -> elevator.setTarget(ElevatorConstants.LEVEL_3_HEIGHT)
       )
     );
+
+    controller.getX().onTrue(
+      new InstantCommand(
+        () -> elevator.setTarget(ElevatorConstants.LEVEL_3_ALGAE_HEIGHT)
+      )
+    );
+
+    
     
     controller.getLeftStick().whileTrue(manualUp);
     controller.getRightStick().whileTrue(manualDown);
@@ -230,6 +242,7 @@ public class RobotContainer {
     //end effector commands
     controller.getLeftTrigger().whileTrue(endEffectorGrab);
     controller.getRightTrigger().whileTrue(endEffectorDrop);
+    controller.getLeft().whileTrue(endEffectorReverse);
 
 
     controller.getUp().whileTrue(dealgerup);
