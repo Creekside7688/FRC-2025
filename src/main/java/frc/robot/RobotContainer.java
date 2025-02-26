@@ -38,18 +38,11 @@ import frc.lib.FlightControl;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 
 
 /**
@@ -94,9 +87,6 @@ public class RobotContainer {
   private final CageClimberClimb climb = new CageClimberClimb(cageClimber);
   private final CageClimberDrop drop = new CageClimberDrop(cageClimber);
 
-
-  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("Center Trough Cycle");
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -105,16 +95,7 @@ public class RobotContainer {
     //configureJoystickBindings();
     configureOperatorBindings();
     //configureSubsystemCommands();
-    configureSwerveDriveCommands();
-
-    NamedCommands.registerCommand("Trough Score", new EndEffectorDrop(endEffector));
-    NamedCommands.registerCommand("Trough Grab", new EndEffectorGrab(endEffector));
-    NamedCommands.registerCommand("Elevator Level 1", new InstantCommand(() -> elevator.setTarget(ElevatorConstants.LEVEL_1_HEIGHT)));
-    NamedCommands.registerCommand("Elevator Level 2", new InstantCommand(() -> elevator.setTarget(ElevatorConstants.LEVEL_2_HEIGHT)));    
-    NamedCommands.registerCommand("Elevator Level 3", new InstantCommand(() -> elevator.setTarget(ElevatorConstants.LEVEL_3_HEIGHT)));    
-    NamedCommands.registerCommand("Elevator Level 4", new InstantCommand(() -> elevator.setTarget(ElevatorConstants.LEVEL_4_HEIGHT)));
-
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    //configureSwerveDriveCommands();
   }
 
 
@@ -276,6 +257,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return autoChooser.getSelected();
+    return Autos.exampleAuto(m_exampleSubsystem);
   }
 }
