@@ -14,11 +14,13 @@ import frc.robot.constants.DealgerConstants;
 public class Dealger extends SubsystemBase {
   /** Creates a new Dealger. */
     private final SparkMax motor;
-  
+    private final RelativeEncoder encoder;
 
     public Dealger() {
        motor = new SparkMax(DealgerConstants.MOTOR_ID, SparkMax.MotorType.kBrushless);
         motor.set(0);
+        encoder = motor.getEncoder();
+        encoder.setPosition(0);
     }
 
     public void Run(double speed) {
@@ -29,6 +31,10 @@ public class Dealger extends SubsystemBase {
       motor.set(0);
     }
 
+    public double getPosition()
+    {
+      return encoder.getPosition();
+    }
 
     
   @Override

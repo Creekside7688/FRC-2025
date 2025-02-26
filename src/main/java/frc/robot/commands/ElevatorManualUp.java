@@ -5,25 +5,24 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Dealger;
+import frc.robot.subsystems.Elevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-
-
-public class DealgerDown extends Command {
-  boolean DealgerUp = true;
-  private final Dealger dealger;
-  /** Creates a new DealgerDown. */
-  public DealgerDown(Dealger dealger) {
-    this.dealger = dealger;
-    addRequirements(dealger);
+public class ElevatorManualUp extends Command {
+  /** Creates a new ElevatorManualUp. */
+  private final Elevator elevator;
+  public ElevatorManualUp(Elevator input) {
+    elevator = input;
+    elevator.setManualMode(true);
+    addRequirements(input);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    dealger.Run(0.6);
+    elevator.spinUp();
+    elevator.setManualMode(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,7 +32,7 @@ public class DealgerDown extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    dealger.stop();
+    elevator.stop();
   }
 
   // Returns true when the command should end.

@@ -22,12 +22,13 @@ public class Elevator extends SubsystemBase {
 
     private double target; // Meters
     private DigitalInput sensor;
-
+    private boolean manual;
     private SparkMaxConfig config;
 
     /** Creates a new Elevator. */
     public Elevator() {
 
+        manual = false;
         motor = new SparkMax(ElevatorConstants.MOTOR_ID, SparkMax.MotorType.kBrushless);
         motor.set(0);
 
@@ -48,6 +49,20 @@ public class Elevator extends SubsystemBase {
     public void periodic() {
         updateDashboard();
 
+        if(manual == false)
+        {
+            goToTarget();
+        }
+        
+    }
+
+    public void setManualMode(boolean isManual)
+    {
+        manual = true;
+    }
+
+    public void goToTarget()
+    {
         if (atBottom()) {
             //encoder.setPosition(0);
         }
@@ -57,20 +72,20 @@ public class Elevator extends SubsystemBase {
         }
 
         else if ((target - encoder.getPosition()) > 0.1) {
-            motor.set(ElevatorConstants.SPEED);
+            motor.set(ElevatorConstants.AUTO_SPEED_UP);
         }
 
         else if ((target - encoder.getPosition()) < 0.1) {
-            motor.set(-ElevatorConstants.SPEED);
+            motor.set(ElevatorConstants.AUTO_SPEED_DOWN);
         }
     }
 
     public void spinUp() {
-        motor.set(ElevatorConstants.SPEED);
+        motor.set(ElevatorConstants.MANUAL_SPEED_UP);
     }
 
     public void spinDown() {
-        motor.set(-ElevatorConstants.SPEED);
+        motor.set(ElevatorConstants.MANUAL_SPEED_DOWN);
     }
 
     public void stop() {
@@ -79,6 +94,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public void setTarget(double meters) {
+        manual = false;
         target = meters;
     }
 

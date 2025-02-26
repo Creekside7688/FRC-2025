@@ -10,6 +10,9 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.CageClimberClimb;
 import frc.robot.commands.CageClimberDrop;
 import frc.robot.commands.DealgerDown;
+import frc.robot.commands.DealgerUp;
+import frc.robot.commands.ElevatorManualUp;
+import frc.robot.commands.ElevatorManualDown;
 import frc.robot.commands.ElevatorTestOFF;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
@@ -65,10 +68,15 @@ public class RobotContainer {
   private final Controller controller = new Controller(1);
   private final Controller teoController = new Controller(2);
   private final EndEffector endEffector = new EndEffector();
-  //private final Dealger dealger = new Dealger();
+  private final Dealger dealger = new Dealger();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
-  //private final DealgerDown dealgerdown = new DealgerDown(dealger);
+  private final DealgerDown dealgerdown = new DealgerDown(dealger);
+  private final DealgerUp dealgerup = new DealgerUp(dealger);
+
+
+  private final ElevatorManualUp manualUp = new ElevatorManualUp(elevator);
+  private final ElevatorManualDown manualDown = new ElevatorManualDown(elevator);
 
   private final Limelight cam =  new Limelight();
   private final FlightControl flightcont = new FlightControl(3);
@@ -198,7 +206,7 @@ public class RobotContainer {
     
     controller.getA().onTrue(
       new InstantCommand(
-        () -> elevator.setTarget(ElevatorConstants.LEVEL_1_HEIGHT)
+        () -> elevator.setTarget(ElevatorConstants.GROUND_HEIGHT)
       )
     );
 
@@ -208,18 +216,24 @@ public class RobotContainer {
       )
     );
 
-    controller.getX().onTrue(
+    controller.getY().onTrue(
       new InstantCommand(
         () -> elevator.setTarget(ElevatorConstants.LEVEL_3_HEIGHT)
       )
     );
     
+    controller.getLeftStick().whileTrue(manualUp);
+    controller.getRightStick().whileTrue(manualDown);
+
     //controller.getA().whileTrue(dealgerdown);
 
     //end effector commands
     controller.getLeftTrigger().whileTrue(endEffectorGrab);
     controller.getRightTrigger().whileTrue(endEffectorDrop);
 
+
+    controller.getUp().whileTrue(dealgerup);
+    controller.getDown().whileTrue(dealgerdown);
     
 
   }
