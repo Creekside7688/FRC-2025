@@ -46,6 +46,10 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -88,6 +92,9 @@ public class RobotContainer {
   private final CageClimberClimb climb = new CageClimberClimb(cageClimber);
   private final CageClimberDrop drop = new CageClimberDrop(cageClimber);
 
+
+  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("Center Trough Cycle");
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -97,6 +104,15 @@ public class RobotContainer {
     configureOperatorBindings();
     //configureSubsystemCommands();
     configureSwerveDriveCommands();
+
+    NamedCommands.registerCommands("Trough Score",new EndEffectorDrop(endEffector));
+    NamedCommands.registerCommands("Trough Grab",new EndEffectorGrab(endEffector));
+    NamedCommands.registerCommands("Elevator Level 1",new InstantCommand(() -> elevator.setTarget(ElevatorConstants.LEVEL_1_HEIGHT)));
+    NamedCommands.registerCommands("Elevator Level 2",new InstantCommand(() -> elevator.setTarget(ElevatorConstants.LEVEL_2_HEIGHT)));    
+    NamedCommands.registerCommands("Elevator Level 3",new InstantCommand(() -> elevator.setTarget(ElevatorConstants.LEVEL_3_HEIGHT)));    
+    NamedCommands.registerCommands("Elevator Level 4",new InstantCommand(() -> elevator.setTarget(ElevatorConstants.LEVEL_4_HEIGHT)));
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
 
@@ -247,6 +263,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return autoChooser.getSelected();
   }
 }
