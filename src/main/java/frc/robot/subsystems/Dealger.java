@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DealgerConstants;
 
@@ -15,23 +14,15 @@ import frc.robot.constants.DealgerConstants;
 public class Dealger extends SubsystemBase {
   /** Creates a new Dealger. */
     private final SparkMax motor;
-    private final RelativeEncoder encoder;
   
 
     public Dealger() {
        motor = new SparkMax(DealgerConstants.MOTOR_ID, SparkMax.MotorType.kBrushless);
         motor.set(0);
-        encoder = motor.getEncoder();
-        encoder.setPosition(0);
     }
 
     public void Run(double speed) {
       motor.set(speed);
-    }
-
-    public double getPose()
-    {
-      return encoder.getPosition();
     }
 
     public void stop() {
@@ -42,7 +33,6 @@ public class Dealger extends SubsystemBase {
     
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("de algaer pos", getPose());
     // This method will be called once per scheduler run
   }
 }

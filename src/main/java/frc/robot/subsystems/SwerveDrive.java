@@ -194,31 +194,6 @@ public class SwerveDrive extends SubsystemBase {
      */
     public void drive(double xSpeed, double ySpeed, double rSpeed, boolean limitSpeed, boolean fieldRelative, boolean rateLimit) {
 
-        xSpeed = xSpeed * -1;
-        /*if(xSpeed > 0.6)
-        {
-            xSpeed = 0.6;
-        }else if(xSpeed < -0.6)
-        {
-            xSpeed = -0.6;
-        }
-
-        if(ySpeed > 0.6)
-        {
-            ySpeed = 0.6;
-        }else if(ySpeed < -0.6)
-        {
-            ySpeed = -0.6;
-        }
-
-        if(rSpeed > 0.6)
-        {
-            rSpeed = 0.6;
-        }else if(rSpeed < -0.6)
-        {
-            rSpeed = -0.6;
-        }*/
-
         // Cube the inputs for fine control at low speeds.
         xSpeed = Math.pow(xSpeed, 3);
         ySpeed = Math.pow(ySpeed, 3);

@@ -31,11 +31,9 @@ public class CageClimber extends SubsystemBase {
       RightMotor.setNeutralMode(NeutralMode.Brake);
     
     }
-    
    public void run(double speed) {
       RightMotor.set(ControlMode.PercentOutput, speed);
-  }
-
+    }
   public boolean sensor1detect() {
     boolean sensorvalue = !sensor1.get();
     return sensorvalue;
@@ -54,9 +52,8 @@ public class CageClimber extends SubsystemBase {
   }
   @Override
   public void periodic() {
-   SmartDashboard.putBoolean("sensor detect 1", sensor1detect());
+   SmartDashboard.putBoolean("sensordetect1", sensor1detect());
    SmartDashboard.putBoolean("sensordetect2", sensor2detect());
-   
     // This method will be called once per scheduler run
   }
 }
