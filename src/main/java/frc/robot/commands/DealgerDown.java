@@ -11,7 +11,6 @@ import frc.robot.subsystems.Dealger;
 
 
 public class DealgerDown extends Command {
-  boolean DealgerUp = true;
   private final Dealger dealger;
   /** Creates a new DealgerDown. */
   public DealgerDown(Dealger dealger) {
@@ -21,14 +20,13 @@ public class DealgerDown extends Command {
   }
 
   // Called when the command is initially scheduled.
+
   @Override
   public void initialize() {
-    if (DealgerUp) {
-      dealger.Run(0.2);
+      dealger.Run(0.6);
 
-    } else {
-      dealger.Run(-0.2);
-    }
+      
+  
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,7 +37,6 @@ public class DealgerDown extends Command {
   @Override
   public void end(boolean interrupted) {
     dealger.stop();
-    DealgerUp = !DealgerUp;
   }
 
   // Returns true when the command should end.
@@ -47,4 +44,30 @@ public class DealgerDown extends Command {
   public boolean isFinished() {
     return false;
   }
+
+/*
+  @Override
+  public void initialize() {
+    if (DealgerUp) {
+      dealger.Run(0.2);
+
+    } else {
+      dealger.Run(-0.2);
+    }
+  }
+
+  @Override
+  public void execute() {}
+
+  @Override
+  public void end(boolean interrupted) {
+    dealger.stop();
+    DealgerUp = !DealgerUp;
+  }
+
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+    */
 }

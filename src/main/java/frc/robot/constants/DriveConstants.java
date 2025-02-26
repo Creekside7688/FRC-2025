@@ -8,10 +8,10 @@ public class DriveConstants {
     public static final String SHUFFLEBOARD_TABLE = "Info";
 
     // Maximum allowed speeds.
-    public static final double MAXIMUM_SPEED_METRES_PER_SECOND = 4;
+    public static final double MAXIMUM_SPEED_METRES_PER_SECOND = 2;
     public static final double MAXIMUM_ANGULAR_SPEED_RADIANS_PER_SECOND = 2 * Math.PI;
 
-    public static final double MAXIMUM_LIMITED_SPEED_METRES_PER_SECOND = 0.5;
+    public static final double MAXIMUM_LIMITED_SPEED_METRES_PER_SECOND = 0.50;
     public static final double MAXIMUM_LIMITED_ANGULAR_SPEED_RADIANS_PER_SECOND = 0.5 * Math.PI;
 
     public static final double MAXIMUM_ELEVATOR_DRIVE_SPEED = 2;

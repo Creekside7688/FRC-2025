@@ -10,6 +10,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.CageClimberClimb;
 import frc.robot.commands.CageClimberDrop;
 import frc.robot.commands.DealgerDown;
+import frc.robot.commands.DealgerUp;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.HexAlign;
 import frc.robot.commands.ElevatorManualUP;
@@ -17,7 +18,7 @@ import frc.robot.commands.ElevatorManualDOWN;
 import frc.robot.subsystems.CageClimber;
 import frc.robot.subsystems.Dealger;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.ElevatorTestSubsystem;
+
 
 
 import frc.robot.commands.EndEffectorDrop;
@@ -32,11 +33,8 @@ import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
-import frc.robot.subsystems.climber;
 import frc.lib.Controller;
 import frc.lib.FlightControl;
-
-import java.util.PrimitiveIterator;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
@@ -63,16 +61,17 @@ public class RobotContainer {
   private final Controller controller = new Controller(1);
   private final Controller teoController = new Controller(2);
   private final EndEffector endEffector = new EndEffector();
-  //private final Dealger dealger = new Dealger();
+  private final Dealger dealger = new Dealger();
+
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
   private final EndEffectorDrop endEffectorDrop = new EndEffectorDrop(endEffector);
-  //private final DealgerDown dealgerdown = new DealgerDown(dealger);
+  private final EndEffectorReverse endEffectorReverse = new EndEffectorReverse(endEffector);
+  private final DealgerUp dealgerup = new DealgerUp(dealger);
+  private final DealgerDown dealgerdown = new DealgerDown(dealger);
 
   private final Limelight cam =  new Limelight();
   private final FlightControl flightcont = new FlightControl(3);
-  /*private final climber clmber = new climber();
-  private final lower lwer = new lower(clmber);
-  private final cimb clmb = new cimb(clmber);*/
+  
 
   
 
@@ -96,7 +95,7 @@ public class RobotContainer {
     //configureJoystickBindings();
     configureOperatorBindings();
     //configureSubsystemCommands();
-    configureSwerveDriveCommands();
+    //configureSwerveDriveCommands();
   }
 
 
@@ -111,14 +110,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureControllerBindings() {
-
-
-    //controller.getX().whileTrue(elevatorTestUP);
-    //controller.getY().whileTrue(elevatorTestDOWN);
-    //controller.getB().whileTrue(elevatorTestOFF);
-
-  
-
     cam.setDefaultCommand(
       new RunCommand(() -> cam.updatesd(), cam)
     );
@@ -126,7 +117,7 @@ public class RobotContainer {
     
     sd.setDefaultCommand(
       new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(teoController.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftX(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(teoController.getLeftY(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(teoController.getRightX(), OperatorConstants.DEADBAND), 
         false, 
@@ -145,11 +136,21 @@ public class RobotContainer {
 
 
     teoController.getRightTrigger().whileTrue(new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(teoController.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftX(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(teoController.getLeftY(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(teoController.getRightX(), OperatorConstants.DEADBAND), 
         true, 
         true, 
+        true)
+      ,sd));
+
+
+      teoController.getLeftTrigger().whileTrue(new RunCommand(() -> sd.drive(
+        -MathUtil.applyDeadband(teoController.getLeftY() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftX(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getRightX(), OperatorConstants.DEADBAND), 
+        true, 
+        false, 
         true)
       ,sd));
 
@@ -161,7 +162,7 @@ public class RobotContainer {
      
     sd.setDefaultCommand(
       new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(flightcont.getJoyX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyX(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
         false, 
@@ -173,7 +174,7 @@ public class RobotContainer {
 
 
     flightcont.getButton1().whileTrue(new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(flightcont.getJoyX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyX(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
         true, 
@@ -188,10 +189,12 @@ public class RobotContainer {
     controller.getLeftBumper().whileTrue(climb);
     controller.getRightBumper().whileTrue(drop);
     
-    //elevator commands
-    /*controller.getY().whileTrue(elevatorTestUP);
-    controller.getX().whileTrue(elevatorTestDOWN);
-    controller.getB().whileTrue(elevatorTestOFF);*/
+    //elevator commands 
+    controller.getX().onTrue(
+      new InstantCommand(
+        () -> elevator.setTarget(ElevatorConstants.TROUGH_HEIGHT)
+      )
+    );
     
     controller.getA().onTrue(
       new InstantCommand(
@@ -205,7 +208,7 @@ public class RobotContainer {
       )
     );
 
-    controller.getX().onTrue(
+    controller.getY().onTrue(
       new InstantCommand(
         () -> elevator.setTarget(ElevatorConstants.LEVEL_3_HEIGHT)
       )
@@ -214,12 +217,19 @@ public class RobotContainer {
     controller.getRightStick().whileTrue(elevatorManualUP);
     controller.getLeftStick().whileTrue(elevatorManualDOWN);
     
+
+    //de-algaer commands
     //controller.getA().whileTrue(dealgerdown);
 
     //end effector commands
     controller.getLeftTrigger().whileTrue(endEffectorGrab);
     controller.getRightTrigger().whileTrue(endEffectorDrop);
+    controller.getLeft().whileTrue(endEffectorReverse);
 
+
+    //dealgier 
+    controller.getDown().whileTrue(dealgerdown);
+    controller.getUp().whileTrue(dealgerup);
     
 
   }

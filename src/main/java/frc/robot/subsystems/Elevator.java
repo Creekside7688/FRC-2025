@@ -9,9 +9,11 @@ import frc.robot.constants.ElevatorConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.RelativeEncoder;
@@ -19,6 +21,7 @@ import com.revrobotics.RelativeEncoder;
 public class Elevator extends SubsystemBase {
     private final SparkMax motor;
     private final RelativeEncoder encoder;
+
 
     private double target; // Meters
     private DigitalInput sensor;
@@ -28,9 +31,10 @@ public class Elevator extends SubsystemBase {
 
     /** Creates a new Elevator. */
     public Elevator() {
-
+        SmartDashboard.putNumber("elevator stall voltage", 0);
         motor = new SparkMax(ElevatorConstants.MOTOR_ID, SparkMax.MotorType.kBrushless);
         motor.set(0);
+
 
         config = new SparkMaxConfig();
 
@@ -52,7 +56,6 @@ public class Elevator extends SubsystemBase {
         updateDashboard();
 
         if (atBottom()) {
-            // encoder.setPosition(0);
         }
 
         if (!manual) {
@@ -62,25 +65,31 @@ public class Elevator extends SubsystemBase {
 
     public void goToTarget() {
 
+        double stallVoltage = SmartDashboard.getNumber("elevator stall voltage", 0);
         if (atTarget()) {
-            motor.set(0);
+            if(target == 0) {
+                motor.setVoltage(0);
+            }
+            else {
+                motor.setVoltage(0.5);
+            }
         }
 
         else if ((target - encoder.getPosition()) > 0.1) {
-            motor.set(ElevatorConstants.AUTO_SPEED);
+            motor.set(ElevatorConstants.AUTO_SPEED_UP);
         }
 
         else if ((target - encoder.getPosition()) < 0.1) {
-            motor.set(-ElevatorConstants.AUTO_SPEED);
+            motor.set(ElevatorConstants.AUTO_SPEED_DOWN);
         }
     }
 
     public void spinUp() {
-        motor.set(ElevatorConstants.MANUAL_SPEED);
+        motor.set(ElevatorConstants.MANUAL_SPEED_UP);
     }
 
     public void spinDown() {
-        motor.set(-ElevatorConstants.MANUAL_SPEED);
+        motor.set(ElevatorConstants.MANUAL_SPEED_DOWN);
     }
 
     public void stop() {
