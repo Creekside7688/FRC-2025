@@ -14,6 +14,9 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+
 import com.revrobotics.RelativeEncoder;
 
 public class Elevator extends SubsystemBase {
@@ -24,6 +27,8 @@ public class Elevator extends SubsystemBase {
     private DigitalInput sensor;
     private boolean manual;
     private SparkMaxConfig config;
+    private int toggleHeight = 0;
+    private int algaeHeight = 0;
 
     /** Creates a new Elevator. */
     public Elevator() {
@@ -43,6 +48,7 @@ public class Elevator extends SubsystemBase {
         sensor = new DigitalInput(ElevatorConstants.SENSOR_CHANNEL);
 
         encoder.setPosition(0);
+        SmartDashboard.putString("current elevator level", "rest");
     }
 
     @Override
@@ -100,6 +106,88 @@ public class Elevator extends SubsystemBase {
     public void stop() {
         motor.set(0);
         motor.stopMotor();
+    }
+
+
+    public void toggleHeightUp()
+    {
+        toggleHeight = toggleHeight + 1;   
+        setTarget(heightValueHandler(toggleHeight));
+    }
+
+    public double heightValueHandler(int toggleHeight)
+    {
+        double desiredHeight = 0;
+        if(toggleHeight > 2)
+        {
+            toggleHeight = 2;
+        }
+        algaeHeight = toggleHeight;
+
+        if(toggleHeight == 0)
+        {
+            desiredHeight = ElevatorConstants.GROUND_HEIGHT;
+            SmartDashboard.putString("current elevator level", "rest");
+        }
+        else if(toggleHeight == 1)
+        {
+            desiredHeight = ElevatorConstants.LEVEL_2_HEIGHT;
+            SmartDashboard.putString("current elevator level", "L2");
+        }
+        else if(toggleHeight == 2)
+        {
+            desiredHeight = ElevatorConstants.LEVEL_3_HEIGHT;
+            SmartDashboard.putString("current elevator level", "L3");
+        }
+        return desiredHeight;
+    }
+
+    public double troughAlgaeHeightHandler(int toggleHeight)
+    {
+        double desiredHeight = 0;
+        if(toggleHeight > 2)
+        {
+            toggleHeight = 2;
+        }
+        this.toggleHeight = toggleHeight;
+
+        if(toggleHeight == 0)
+        {
+            desiredHeight = ElevatorConstants.GROUND_HEIGHT;
+            SmartDashboard.putString("current elevator level", "rest");
+        }
+        else if(toggleHeight == 1)
+        {
+            desiredHeight = ElevatorConstants.LEVEL_2_ALGAE_HEIGHT;
+            SmartDashboard.putString("current elevator level", "L2ALGAE");
+        }
+        else if(toggleHeight == 2)
+        {
+            desiredHeight = ElevatorConstants.LEVEL_3_ALGAE_HEIGHT;
+            SmartDashboard.putString("current elevator level", "L3ALGAE");
+        }
+        return desiredHeight;
+    }
+
+    public void toggleHeightDown()
+    {
+        toggleHeight = toggleHeight - 1;
+        setTarget(heightValueHandler(toggleHeight));
+    }
+
+
+
+
+    public void toggleAlgaeUp()
+    {
+        algaeHeight = algaeHeight + 1;
+        setTarget(troughAlgaeHeightHandler(algaeHeight));
+    }
+
+    public void toggleAlgaeDown()
+    {
+        algaeHeight = algaeHeight - 1;
+        setTarget(troughAlgaeHeightHandler(algaeHeight));
     }
 
     public void setTarget(double meters) {

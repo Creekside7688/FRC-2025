@@ -10,6 +10,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.CageClimberClimb;
 import frc.robot.commands.CageClimberDrop;
 import frc.robot.commands.DealgerDown;
+import frc.robot.commands.DealgerDrop;
 import frc.robot.commands.DealgerUp;
 import frc.robot.commands.ElevatorManualUp;
 import frc.robot.commands.ElevatorManualDown;
@@ -75,6 +76,7 @@ public class RobotContainer {
   private final EndEffectorReverse endEffectorReverse = new EndEffectorReverse(endEffector);
   private final DealgerDown dealgerdown = new DealgerDown(dealger);
   private final DealgerUp dealgerup = new DealgerUp(dealger);
+  private final DealgerDrop dealgerDrop = new DealgerDrop(dealger);
 
 
   private final ElevatorManualUp manualUp = new ElevatorManualUp(elevator);
@@ -167,6 +169,16 @@ public class RobotContainer {
       ,sd));
 
 
+      teoController.getLeftTrigger().whileTrue(new RunCommand(() -> sd.drive(
+        -MathUtil.applyDeadband(teoController.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getRightX(), OperatorConstants.DEADBAND), 
+        true, 
+        false, 
+        true)
+      ,sd));
+
+
     
   }
 
@@ -208,29 +220,31 @@ public class RobotContainer {
     controller.getX().whileTrue(elevatorTestDOWN);
     controller.getB().whileTrue(elevatorTestOFF);*/
     
-    controller.getA().onTrue(
+    controller.getBack().onTrue(
       new InstantCommand(
-        () -> elevator.setTarget(ElevatorConstants.GROUND_HEIGHT)
+        () -> elevator.toggleAlgaeDown()
       )
     );
 
-    controller.getB().onTrue(
+    controller.getStart().onTrue(
       new InstantCommand(
-        () -> elevator.setTarget(ElevatorConstants.LEVEL_2_HEIGHT)
+        () -> elevator.toggleAlgaeUp()
       )
     );
 
+    
     controller.getY().onTrue(
       new InstantCommand(
-        () -> elevator.setTarget(ElevatorConstants.LEVEL_3_HEIGHT)
+        () -> elevator.toggleHeightUp()
       )
     );
 
-    controller.getX().onTrue(
+    controller.getA().onTrue(
       new InstantCommand(
-        () -> elevator.setTarget(ElevatorConstants.LEVEL_3_ALGAE_HEIGHT)
+        () -> elevator.toggleHeightDown()
       )
     );
+    
 
     
     
@@ -247,6 +261,7 @@ public class RobotContainer {
 
     controller.getUp().whileTrue(dealgerup);
     controller.getDown().whileTrue(dealgerdown);
+    controller.getRight().whileTrue(dealgerDrop);
     
 
   }
