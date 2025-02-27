@@ -68,7 +68,7 @@ public class RobotContainer {
   private final SwerveDrive sd = new SwerveDrive();
 
   private final Controller controller = new Controller(1);
-  private final Controller teoController = new Controller(2);
+  private final Controller teoController = new Controller(2 );
   private final EndEffector endEffector = new EndEffector();
   private final Dealger dealger = new Dealger();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
@@ -111,7 +111,7 @@ public class RobotContainer {
     //configureJoystickBindings();
     configureOperatorBindings();
     //configureSubsystemCommands();
-    configureSwerveDriveCommands();
+    //configureSwerveDriveCommands();
   }
 
 
@@ -141,7 +141,7 @@ public class RobotContainer {
     
     sd.setDefaultCommand(
       new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(teoController.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftX(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(teoController.getLeftY(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(teoController.getRightX(), OperatorConstants.DEADBAND), 
         false, 
@@ -160,7 +160,7 @@ public class RobotContainer {
 
 
     teoController.getRightTrigger().whileTrue(new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(teoController.getLeftX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftX(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(teoController.getLeftY(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(teoController.getRightX(), OperatorConstants.DEADBAND), 
         true, 
@@ -170,8 +170,8 @@ public class RobotContainer {
 
 
       teoController.getLeftTrigger().whileTrue(new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(teoController.getLeftX() * -1, OperatorConstants.DEADBAND), 
-        -MathUtil.applyDeadband(teoController.getLeftY(), OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftY() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(teoController.getLeftX(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(teoController.getRightX(), OperatorConstants.DEADBAND), 
         true, 
         false, 
@@ -186,7 +186,7 @@ public class RobotContainer {
      
     sd.setDefaultCommand(
       new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(flightcont.getJoyX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyX(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
         false, 
@@ -198,7 +198,7 @@ public class RobotContainer {
 
 
     flightcont.getButton1().whileTrue(new RunCommand(() -> sd.drive(
-        -MathUtil.applyDeadband(flightcont.getJoyX() * -1, OperatorConstants.DEADBAND), 
+        -MathUtil.applyDeadband(flightcont.getJoyX(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(flightcont.getJoyY(), OperatorConstants.DEADBAND), 
         -MathUtil.applyDeadband(flightcont.getTwist(), OperatorConstants.DEADBAND), 
         true, 

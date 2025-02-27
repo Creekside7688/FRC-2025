@@ -12,13 +12,13 @@ public class ElevatorConstants {
     public static final double MANUAL_SPEED_UP = 0.8;
 	public static final double MANUAL_SPEED_DOWN = -0.3;
 	public static final int SENSOR_CHANNEL = 8;
-	public static final double STALL_VOLTAGE = 0.6;
+	public static final double STALL_VOLTAGE = 0.8;
 
     // UNITS: ENCODER ROTATIONS
 	public static final double GROUND_HEIGHT = 0;
 	public static final double TROUGH_HEIGHT = 1.2;
 	public static final double LEVEL_2_HEIGHT = 3.9;
-	public static final double LEVEL_3_HEIGHT = 8.0;
+	public static final double LEVEL_3_HEIGHT = 8.3;
 	public static final double LEVEL_4_HEIGHT = 0;
 
 	public static final double LEVEL_2_ALGAE_HEIGHT = 1.3;

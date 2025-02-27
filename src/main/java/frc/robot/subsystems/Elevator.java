@@ -74,7 +74,7 @@ public class Elevator extends SubsystemBase {
         }
 
         if (atTarget()) {
-            motor.set(0);
+            
             
             if(target != 0)
             {
@@ -82,7 +82,7 @@ public class Elevator extends SubsystemBase {
             }
             else
             {
-                motor.setVoltage(0);
+                motor.set(0);
             }
         }
 
@@ -90,7 +90,7 @@ public class Elevator extends SubsystemBase {
             motor.set(ElevatorConstants.AUTO_SPEED_UP);
         }
 
-        else if ((target - encoder.getPosition()) < 0.1) {
+        else if ((target - encoder.getPosition()) < -0.1) {
             motor.set(ElevatorConstants.AUTO_SPEED_DOWN);
         }
     }

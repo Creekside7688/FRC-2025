@@ -62,7 +62,7 @@ public class SwerveDrive extends SubsystemBase {
         DriveConstants.BR_TURN_MOTOR,
         DriveConstants.BR_OFFSET
     );
-
+ 
     // Gyro
     private final AHRS gyro = new AHRS(NavXComType.kUSB1);
 
@@ -193,6 +193,8 @@ public class SwerveDrive extends SubsystemBase {
      * Drives the robot using controller input.
      */
     public void drive(double xSpeed, double ySpeed, double rSpeed, boolean limitSpeed, boolean fieldRelative, boolean rateLimit) {
+
+        xSpeed = xSpeed * -1;
 
         // Cube the inputs for fine control at low speeds.
         xSpeed = Math.pow(xSpeed, 3);
