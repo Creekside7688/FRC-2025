@@ -90,17 +90,19 @@ public class Elevator extends SubsystemBase {
             motor.set(ElevatorConstants.AUTO_SPEED_UP);
         }
 
-        else if ((target - encoder.getPosition()) < -0.1) {
+        else if ((target - encoder.getPosition()) < -0.05) {
             motor.set(ElevatorConstants.AUTO_SPEED_DOWN);
         }
     }
 
     public void spinUp() {
         motor.set(ElevatorConstants.MANUAL_SPEED_UP);
+        SmartDashboard.putString("current elevator level", "manual");
     }
 
     public void spinDown() {
         motor.set(ElevatorConstants.MANUAL_SPEED_DOWN);
+        SmartDashboard.putString("current elevator level", "manual");
     }
 
     public void stop() {
@@ -122,6 +124,12 @@ public class Elevator extends SubsystemBase {
         {
             toggleHeight = 2;
         }
+        else if(toggleHeight < 0)
+        {
+            toggleHeight = 0;
+        }
+
+
         algaeHeight = toggleHeight;
 
         if(toggleHeight == 0)
@@ -149,6 +157,12 @@ public class Elevator extends SubsystemBase {
         {
             toggleHeight = 2;
         }
+        else if(toggleHeight < 0)
+        {
+            toggleHeight = 0;
+        }
+
+
         this.toggleHeight = toggleHeight;
 
         if(toggleHeight == 0)
@@ -172,6 +186,10 @@ public class Elevator extends SubsystemBase {
     public void toggleHeightDown()
     {
         toggleHeight = toggleHeight - 1;
+        if(toggleHeight < 0)
+        {
+            toggleHeight = 0;
+        }
         setTarget(heightValueHandler(toggleHeight));
     }
 
@@ -208,5 +226,7 @@ public class Elevator extends SubsystemBase {
         // SmartDashboard.putData("Elevator", elevatorMech);
         SmartDashboard.putNumber("Elevator Rotations", encoder.getPosition());
         SmartDashboard.putNumber("Target height", target);
+        SmartDashboard.putNumber("toggle height Coral Levs", toggleHeight);
+        SmartDashboard.putNumber("algae height Lev", algaeHeight);
     }
 }

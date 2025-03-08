@@ -17,12 +17,12 @@ public class ElevatorConstants {
     // UNITS: ENCODER ROTATIONS
 	public static final double GROUND_HEIGHT = 0;
 	public static final double TROUGH_HEIGHT = 1.2;
-	public static final double LEVEL_2_HEIGHT = 3.9;
-	public static final double LEVEL_3_HEIGHT = 8.3;
+	public static final double LEVEL_2_HEIGHT = 4.7;
+	public static final double LEVEL_3_HEIGHT = 9.0;
 	public static final double LEVEL_4_HEIGHT = 0;
 
 	public static final double LEVEL_2_ALGAE_HEIGHT = 1.3;
-	public static final double LEVEL_3_ALGAE_HEIGHT = 5.3;
+	public static final double LEVEL_3_ALGAE_HEIGHT = 6.7;
 
 	public static final int LEVEL_0_BUTTON = 0;
 	public static final int LEVEL_1_BUTTON = 0;

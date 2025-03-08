@@ -117,7 +117,7 @@ public class SwerveDrive extends SubsystemBase {
             visionMeasurementDeviations
         );
 
-        /*RobotConfig config;
+        RobotConfig config;
         try{
             config = RobotConfig.fromGUISettings();
         }
@@ -142,7 +142,7 @@ public class SwerveDrive extends SubsystemBase {
                 return false;
             },
             this
-        );*/
+        );
 
         SimCameraProperties cameraProperties = new SimCameraProperties();
         cameraProperties.setCalibration(640, 480, Rotation2d.fromDegrees(75.76079874010732));
@@ -172,6 +172,7 @@ public class SwerveDrive extends SubsystemBase {
     @Override
     public void periodic() {
 
+        SmartDashboard.putNumber("yPose", getPose().getY());
         // Update pose estimator with encoder data
         poseEstimator.update(this.getRotation2d(), this.getModulePositions());
 
@@ -185,8 +186,8 @@ public class SwerveDrive extends SubsystemBase {
         // Update the pose on the field.
         field.setRobotPose(dashboardPose);
 
-        SmartDashboard.putData("Field", field);
-        SmartDashboard.putNumber("Heading", this.getRotation2d().getDegrees());
+       // SmartDashboard.putData("Field", field);
+       // SmartDashboard.putNumber("Heading", this.getRotation2d().getDegrees());
     }
 
     /**
@@ -324,6 +325,13 @@ public class SwerveDrive extends SubsystemBase {
         frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
         backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
         backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    }
+
+    public void driveBackPose() {
+        frontLeft.setDesiredState(new SwerveModuleState(0.5, Rotation2d.fromDegrees(0)));
+        frontRight.setDesiredState(new SwerveModuleState(0.5, Rotation2d.fromDegrees(0)));
+        backLeft.setDesiredState(new SwerveModuleState(0.5, Rotation2d.fromDegrees(0)));
+        backRight.setDesiredState(new SwerveModuleState(0.5, Rotation2d.fromDegrees(0)));
     }
 
     /**

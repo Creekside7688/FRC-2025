@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.constants.ElevatorConstants;
 import frc.robot.constants.OperatorConstants;
+import frc.robot.commands.AutoBack;
 import frc.robot.commands.Autos;
 import frc.robot.commands.CageClimberClimb;
 import frc.robot.commands.CageClimberDrop;
@@ -44,6 +45,8 @@ import frc.lib.FlightControl;
 
 import java.util.PrimitiveIterator;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -67,8 +70,8 @@ public class RobotContainer {
   private final Elevator elevator = new Elevator();
   private final SwerveDrive sd = new SwerveDrive();
 
-  private final Controller controller = new Controller(1);
-  private final Controller teoController = new Controller(2 );
+  private final Controller controller = new Controller(1 );
+  private final Controller teoController = new Controller(2);
   private final EndEffector endEffector = new EndEffector();
   private final Dealger dealger = new Dealger();
   private final EndEffectorGrab endEffectorGrab = new EndEffectorGrab(endEffector);
@@ -87,13 +90,10 @@ public class RobotContainer {
   /*private final climber clmber = new climber();
   private final lower lwer = new lower(clmber);
   private final cimb clmb = new cimb(clmber);*/
-
+  private final AutoBack ab = new AutoBack(sd);
   
 
 
-  private final TriggerTest tt = new TriggerTest();
-
-  private final HexAlign hexalign = new HexAlign(cam, sd);
 
   //private final ElevatorTestOFF elevatorTestOFF = new ElevatorTestOFF(m_ElevatorTestSubsystem);
   //private final ElevatorTestUP elevatorTestUP = new ElevatorTestUP(m_ElevatorTestSubsystem);
@@ -111,7 +111,7 @@ public class RobotContainer {
     //configureJoystickBindings();
     configureOperatorBindings();
     //configureSubsystemCommands();
-    //configureSwerveDriveCommands();
+    configureSwerveDriveCommands();
   }
 
 
@@ -269,7 +269,7 @@ public class RobotContainer {
 
 
   private void configureSwerveDriveCommands() {
-    controller.getRightStick()
+    teoController.getDown()
         .whileTrue(
             new RunCommand(
                 () -> sd.zeroHeading(),
@@ -277,7 +277,7 @@ public class RobotContainer {
             )
         );
 
-    flightcont.getButton3().whileTrue(new RunCommand(() -> sd.lockPosition(), sd));
+    //flightcont.getButton3().whileTrue(new RunCommand(() -> sd.lockPosition(), sd));
 
 }
 
@@ -289,6 +289,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return ab;
   }
 }
