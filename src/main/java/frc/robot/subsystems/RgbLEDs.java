@@ -19,7 +19,7 @@ public class RgbLEDs extends SubsystemBase {
   AddressableLED led = new AddressableLED(9);
     AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(60);
     final LEDPattern rainbow = LEDPattern.rainbow(255, 128);  
-    final Distance kLedSpacing = Meters.of(1 / 120.0);
+    final Distance kLedSpacing = Meters.of(1 / 30.0);
     final LEDPattern scrollingRainbow =
     rainbow.scrollAtAbsoluteSpeed(MetersPerSecond.of(1), kLedSpacing);
   /** Creates a new RGBLEDs. 
