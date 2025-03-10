@@ -38,6 +38,7 @@ import frc.robot.subsystems.EndEffector;
 
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.RgbLEDs;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.climber;
 import frc.lib.Controller;
@@ -102,6 +103,7 @@ public class RobotContainer {
   private final CageClimber cageClimber = new CageClimber();
   private final CageClimberClimb climb = new CageClimberClimb(cageClimber);
   private final CageClimberDrop drop = new CageClimberDrop(cageClimber);
+  private final RgbLEDs rgbLeds = new RgbLEDs();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
