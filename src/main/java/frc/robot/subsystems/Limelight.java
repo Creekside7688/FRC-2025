@@ -19,6 +19,7 @@ import frc.robot.subsystems.SwerveDrive;
 
 import org.photonvision.*;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -140,7 +141,7 @@ public class Limelight extends SubsystemBase {
         return target != null;
     }
 
-    public void alignRotation() {
+    public boolean isAlignedRotation() {
         double yaw = getBestYaw();
         // Tolerance of 5 degree
         if (yaw > 5.00) {
@@ -149,10 +150,13 @@ public class Limelight extends SubsystemBase {
             SmartDashboard.putString("Angle lined up?", "rotate right");
         } else {
             SmartDashboard.putString("Angle lined up?", CameraHasTargets() ? "Lined up" : "No target");
+            return CameraHasTargets() ? true : false;
         }
+
+        return false;
     }
 
-    public void alignPosition(double desired) {
+    public boolean isAlignedPosition(double desired) {
         double distance = getBestDistance();
         double difference = distance - desired;
         // Tolerance of 0.3 meters
@@ -162,7 +166,10 @@ public class Limelight extends SubsystemBase {
             SmartDashboard.putString("Distance correct? ", "Move away");
         } else {
             SmartDashboard.putString("Distance correct? ", CameraHasTargets() ? "Correct" : "No target");
+            return CameraHasTargets() ? true : false;
         }
+        
+        return false;
     }
 
     public double getBestDistance() {
@@ -186,8 +193,13 @@ public class Limelight extends SubsystemBase {
             // should change code to confirm if target matches desired ficudal tag ID
             latestPipeline = results.get(results.size() - 1);
             target = latestPipeline.getBestTarget();
-            alignRotation();
-            alignPosition(desired);
+            if (isAlignedRotation() &&
+            isAlignedPosition(desired)) {
+                robotcamera.setLED(VisionLEDMode.kOn);
+            } else {
+                robotcamera.setLED(VisionLEDMode.kOff);
+            }
+
 
             if (target != null) {
                 EstimatedRobotPose estimatedRobotPose = getEstimatedGlobalPose();
