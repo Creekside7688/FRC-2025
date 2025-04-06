@@ -51,7 +51,7 @@ public class Limelight extends SubsystemBase {
         SmartDashboard.putNumber("Target FID", 0);
         SmartDashboard.putBoolean("Robot Has targets?", false);
 
-        aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+        aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
         photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout,
                 PoseStrategy.CLOSEST_TO_REFERENCE_POSE, robotToCam);
 
@@ -68,15 +68,19 @@ public class Limelight extends SubsystemBase {
     // }
     // }
 
-    public double correctToMeters(double x) {
+    public static double correctToMeters(double x) {
         return x * 0.1514;
     }
 
-    public Pose2d correctToMeters(Pose2d x) {
+    public static Pose2d correctToMeters(Pose2d x) {
         return x.times(0.1514);
     }
 
-    public Pose3d correctToMeters(Pose3d x) {
+    public static Pose3d correctToMeters(Pose3d x) {
+        return x.times(0.1514);
+    }
+
+    public static Transform3d correctToMeters(Transform3d x) {
         return x.times(0.1514);
     }
 

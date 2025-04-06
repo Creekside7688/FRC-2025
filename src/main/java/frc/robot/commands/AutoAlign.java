@@ -1,8 +1,10 @@
 package frc.robot.commands;
 
+import java.util.Optional;
+
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -52,8 +54,6 @@ public class AutoAlign extends Command {
             new Translation3d(1.5, 0.0, 0.0),
             new Rotation3d(0.0, 0.0, Math.PI));
 
-    private Pose2d currentPose;
-
     private PhotonTrackedTarget lastTarget;
 
     private final int TAG;
@@ -72,25 +72,23 @@ public class AutoAlign extends Command {
     @Override
     public void initialize() {
         lastTarget = null;
-        final var robotPose = sd.getPose();
+        Pose2d robotPose = sd.getPose();
         xController.reset(robotPose.getX());
         yController.reset(robotPose.getY());
         thetaController.reset(robotPose.getRotation().getRadians());
-
-        currentPose = sd.getPose();
     }
 
     @Override
     public void execute() {
-        final var robotPose2d = sd.getPose();
-        final var robotPose = new Pose3d(robotPose2d.getX(),
+        Pose2d robotPose2d = sd.getPose();
+        Pose3d robotPose = new Pose3d(robotPose2d.getX(),
                 robotPose2d.getY(),
                 0.0,
                 new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
 
-        final var result = limelight.getLatestResult();
+        PhotonPipelineResult result = limelight.getLatestResult();
         if (result.hasTargets()) {
-            final var potentialTarget = result.getTargets().stream()
+            Optional<PhotonTrackedTarget> potentialTarget = result.getTargets().stream()
                     .filter(t -> t.getFiducialId() == TAG)
                     .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= 0.2 && t.getPoseAmbiguity() != -1)
                     .findFirst();
@@ -99,12 +97,12 @@ public class AutoAlign extends Command {
                 final var target = potentialTarget.get();
                 lastTarget = target;
 
-                final var cameraPose = robotPose.transformBy(new Transform3d());
+                Pose3d cameraPose = robotPose.transformBy(new Transform3d());
 
-                final var camToTarget = target.getBestCameraToTarget();
-                final var targetPose = cameraPose.transformBy(camToTarget);
+                Transform3d camToTarget = Limelight.correctToMeters(target.getBestCameraToTarget());
+                Pose3d targetPose = cameraPose.transformBy(camToTarget);
 
-                final var goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
+                Pose2d goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
 
                 xController.setGoal(goalPose.getX());
                 yController.setGoal(goalPose.getY());
@@ -114,15 +112,15 @@ public class AutoAlign extends Command {
             if (lastTarget == null)
                 sd.drive(0, 0, 0, false, true, false);
             else {
-                var xSpeed = xController.calculate(robotPose.getX());
+                double xSpeed = xController.calculate(robotPose.getX());
                 if (xController.atGoal())
                     xSpeed = 0;
 
-                var ySpeed = yController.calculate(robotPose.getY());
+                double ySpeed = yController.calculate(robotPose.getY());
                 if (yController.atGoal())
                     ySpeed = 0;
 
-                var thetaSpeed = thetaController.calculate(robotPose2d.getRotation().getRadians());
+                double thetaSpeed = thetaController.calculate(robotPose2d.getRotation().getRadians());
                 if (thetaController.atGoal())
                     thetaSpeed = 0;
                 sd.drive(xSpeed, ySpeed, thetaSpeed, false, true, false);
@@ -131,15 +129,13 @@ public class AutoAlign extends Command {
     }
 
     @Override
-    public void end(final boolean interrupted) {
-        // TODO Auto-generated method stub
-        super.end(interrupted);
+    public void end(boolean interrupted) {
+        sd.drive(0, 0, 0, false, true, false);
     }
 
     @Override
     public boolean isFinished() {
-        // TODO Auto-generated method stub
-        return super.isFinished();
+        return xController.atGoal() && yController.atGoal() && thetaController.atGoal();
     }
 
 }
