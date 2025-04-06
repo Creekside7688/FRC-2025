@@ -52,34 +52,33 @@ public class HexAlign extends Command {
   public void initialize() {
     if (limelight.CameraHasTargets()) {
 
-      currentTag = limelight.getAprilTag();
-      checkTag = String.valueOf(currentTag);
+      currentTag = limelight.getBestAprilTag();
 
-      if (Arrays.stream(ApriltagConstants.CoralTags).anyMatch(checkTag::equals)) {
+      if (Arrays.stream(ApriltagConstants.CoralTags).anyMatch(a -> a == currentTag)) {
 
         targetHeight = ApriltagConstants.CoralHeight;
 
-      } else if (Arrays.stream(ApriltagConstants.ProcessTags).anyMatch(checkTag::equals)) {
+      } else if (Arrays.stream(ApriltagConstants.ProcessTags).anyMatch(a -> a == currentTag)) {
 
         targetHeight = ApriltagConstants.ProcessHeight;
 
-      } else if (Arrays.stream(ApriltagConstants.ReefTags).anyMatch(checkTag::equals)) {
+      } else if (Arrays.stream(ApriltagConstants.ReefTags).anyMatch(a -> a == currentTag)) {
 
         targetHeight = ApriltagConstants.ReefHeight;
         
-      } else if (Arrays.stream(ApriltagConstants.BargeTags).anyMatch(checkTag::equals)) {
+      } else if (Arrays.stream(ApriltagConstants.BargeTags).anyMatch(a -> a == currentTag)) {
 
         targetHeight = ApriltagConstants.BargeHeight;
         
       }
 
-      targetYaw = limelight.TargetYaw();
+      targetYaw = limelight.getBestYaw();
 
       targetRange = PhotonUtils.calculateDistanceToTargetMeters(
         ApriltagConstants.CameraVertPos,
         targetHeight,
         Units.degreesToRadians(ApriltagConstants.CameraAngle),
-        Units.degreesToRadians(limelight.TargetPitch())
+        Units.degreesToRadians(limelight.getBestPitch())
       );
 
       rotate = (ApriltagConstants.CameraAprilAngle - targetYaw) * ApriltagConstants.CameraTurnGain * DriveConstants.MAXIMUM_ANGULAR_SPEED_RADIANS_PER_SECOND;
