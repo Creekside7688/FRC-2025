@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -21,6 +22,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.util.sendable.Sendable;
@@ -80,7 +82,7 @@ public class SwerveDrive extends SubsystemBase {
      * Standard deviations of the vision measurements. Increase these numbers to trust global measurements from vision less. This matrix is in the
      * form [x, y, theta]ᵀ, with units in meters and radians.
      */
-    private static final Vector<N3> visionMeasurementDeviations = VecBuilder.fill(1.5, 1.5, 1.5);
+    private static final Vector<N3> visionMeasurementDeviations = VecBuilder.fill(0.3, 0.3, 0.3);
 
     private final SwerveDrivePoseEstimator poseEstimator;
 
@@ -366,7 +368,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void updatePoseEstimates(EstimatedRobotPose estimatedRobotPose) {
-        poseEstimator.addVisionMeasurement(estimatedRobotPose.estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds);
+        poseEstimator.addVisionMeasurement(estimatedRobotPose.estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds, visionMeasurementDeviations);
     }
 
     /**

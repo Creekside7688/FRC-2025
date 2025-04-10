@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import static edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition.values;
-
 import java.util.Arrays;
 
 import org.photonvision.PhotonUtils;
@@ -50,7 +48,7 @@ public class HexAlign extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (limelight.CameraHasTargets()) {
+    if (limelight.CameraHasTarget()) {
 
       currentTag = limelight.getBestAprilTag();
 

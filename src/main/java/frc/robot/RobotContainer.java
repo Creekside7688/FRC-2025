@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.constants.OperatorConstants;
+import frc.robot.commands.AutoAlign;
 import frc.robot.commands.AutoBack;
 import frc.robot.commands.CageClimberClimb;
 import frc.robot.commands.CageClimberDrop;
@@ -19,6 +20,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.commands.EndEffectorDrop;
 import frc.robot.commands.EndEffectorGrab;
 import frc.robot.commands.EndEffectorReverse;
+import frc.robot.commands.aligntest;
 import frc.robot.subsystems.EndEffector;
 
 import frc.robot.subsystems.ExampleSubsystem;
@@ -36,6 +38,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import frc.robot.commands.aligntest;
+
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -48,6 +52,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
 
     private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+
     // private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new
     // ElevatorTestSubsystem();
     private final Elevator elevator = new Elevator();
@@ -69,6 +74,10 @@ public class RobotContainer {
 
     private final Limelight cam = new Limelight(sd);
     private final FlightControl flightcont = new FlightControl(3);
+
+    private final AutoAlign autoAlign = new AutoAlign(sd, cam,3);
+
+    private final aligntest atest = new aligntest(cam, sd);
     /*
      * private final climber clmber = new climber();
      * private final lower lwer = new lower(clmber);
@@ -179,8 +188,11 @@ public class RobotContainer {
     public void configureOperatorBindings() {
 
         // climber commands
-        controller.getLeftBumper().whileTrue(climb);
+//        controller.getLeftBumper().whileTrue(climb);
         controller.getRightBumper().whileTrue(drop);
+
+        teoController.getLeftBumper().whileTrue(atest);
+        teoController.getRightBumper().whileTrue(autoAlign);
 
         // elevator commands
         /*

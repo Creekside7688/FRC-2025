@@ -15,8 +15,6 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
-
 import com.revrobotics.RelativeEncoder;
 
 public class Elevator extends SubsystemBase {

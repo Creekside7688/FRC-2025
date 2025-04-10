@@ -12,10 +12,13 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.constants.VisionConstants;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 /**
  * AutoAlign
@@ -51,7 +54,7 @@ public class AutoAlign extends Command {
             VisionConstants.THETA_CONTROLLER.kD, THETA_CONSTRAINTS);
 
     private static final Transform3d TAG_TO_GOAL = new Transform3d(
-            new Translation3d(1.5, 0.0, 0.0),
+            new Translation3d(Units.inchesToMeters(36), 0.0, 0.0),
             new Rotation3d(0.0, 0.0, Math.PI));
 
     private PhotonTrackedTarget lastTarget;
@@ -61,8 +64,11 @@ public class AutoAlign extends Command {
     public AutoAlign(final SwerveDrive sd, final Limelight limelight, final int tag) {
         xController.setTolerance(VisionConstants.TRANSLATE_CONTROLLER.TOLERANCE);
         yController.setTolerance(VisionConstants.TRANSLATE_CONTROLLER.TOLERANCE);
+        thetaController.setTolerance(VisionConstants.THETA_CONTROLLER.TOLERANCE);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-        this.TAG = tag;
+        
+        // Tag to chase
+        this.TAG = 3;
 
         this.limelight = limelight;
         this.sd = sd;
@@ -94,12 +100,12 @@ public class AutoAlign extends Command {
                     .findFirst();
 
             if (potentialTarget.isPresent()) {
-                final var target = potentialTarget.get();
+                var target = potentialTarget.get();
                 lastTarget = target;
 
-                Pose3d cameraPose = robotPose.transformBy(new Transform3d());
+                Pose3d cameraPose = robotPose.transformBy(VisionConstants.ROBOT_TO_CAM);
 
-                Transform3d camToTarget = Limelight.correctToMeters(target.getBestCameraToTarget());
+                Transform3d camToTarget = target.getBestCameraToTarget();
                 Pose3d targetPose = cameraPose.transformBy(camToTarget);
 
                 Pose2d goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
@@ -110,7 +116,7 @@ public class AutoAlign extends Command {
             }
 
             if (lastTarget == null)
-                sd.drive(0, 0, 0, false, true, false);
+                sd.drive(0, 0, 0, false, false, false);
             else {
                 double xSpeed = xController.calculate(robotPose.getX());
                 if (xController.atGoal())
@@ -123,19 +129,27 @@ public class AutoAlign extends Command {
                 double thetaSpeed = thetaController.calculate(robotPose2d.getRotation().getRadians());
                 if (thetaController.atGoal())
                     thetaSpeed = 0;
-                sd.drive(xSpeed, ySpeed, thetaSpeed, false, true, false);
+
+                sd.driveRelative(
+                        new ChassisSpeeds(
+                            xSpeed,
+                            ySpeed,
+                            thetaSpeed
+                            )
+                        );
             }
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        sd.drive(0, 0, 0, false, true, false);
+        sd.drive(0, 0, 0, false, false, false);
     }
 
     @Override
     public boolean isFinished() {
-        return xController.atGoal() && yController.atGoal() && thetaController.atGoal();
+        return false;
+        // return xController.atGoal() && yController.atGoal() && thetaController.atGoal();
     }
 
 }
