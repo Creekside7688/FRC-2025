@@ -1,10 +1,6 @@
 package frc.robot.constants;
 
 public class ApriltagConstants {
-    public static final double CameraHorPos = 0;
-    public static final double CameraVertPos = 0.3; // Placebo number
-    public static final double CameraAngle = 0; // In Degrees
-
     public static final int[] CoralTags = { 1, 2, 12, 13 };                        
     public static final int[] ProcessTags = { 3, 16 };
     public static final int[] ReefTags = { 6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22 };

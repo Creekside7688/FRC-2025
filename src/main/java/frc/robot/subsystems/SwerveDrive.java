@@ -82,7 +82,8 @@ public class SwerveDrive extends SubsystemBase {
      * Standard deviations of the vision measurements. Increase these numbers to trust global measurements from vision less. This matrix is in the
      * form [x, y, theta]ᵀ, with units in meters and radians.
      */
-    private static final Vector<N3> visionMeasurementDeviations = VecBuilder.fill(0.3, 0.3, 0.3);
+
+    private static final Vector<N3> visionMeasurementDeviations = VecBuilder.fill(1.5, 1.5, 1.5);
 
     private final SwerveDrivePoseEstimator poseEstimator;
 
@@ -367,8 +368,12 @@ public class SwerveDrive extends SubsystemBase {
         return poseEstimator.getEstimatedPosition();
     }
 
+    public void updatePoseEstimates(EstimatedRobotPose estimatedRobotPose, Matrix<N3, N1> VstdDevs) {
+        poseEstimator.addVisionMeasurement(estimatedRobotPose.estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds, VstdDevs);
+    }
+
     public void updatePoseEstimates(EstimatedRobotPose estimatedRobotPose) {
-        poseEstimator.addVisionMeasurement(estimatedRobotPose.estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds, visionMeasurementDeviations);
+        poseEstimator.addVisionMeasurement(estimatedRobotPose.estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds);
     }
 
     /**

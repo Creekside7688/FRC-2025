@@ -23,7 +23,7 @@ import frc.robot.commands.EndEffectorReverse;
 import frc.robot.commands.aligntest;
 import frc.robot.subsystems.EndEffector;
 
-import frc.robot.subsystems.ExampleSubsystem;
+// import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.RgbLEDs;
 import frc.robot.subsystems.SwerveDrive;
@@ -38,8 +38,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-import frc.robot.commands.aligntest;
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -51,7 +49,7 @@ import frc.robot.commands.aligntest;
  */
 public class RobotContainer {
 
-    private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+    //private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
     // private final ElevatorTestSubsystem m_ElevatorTestSubsystem = new
     // ElevatorTestSubsystem();
