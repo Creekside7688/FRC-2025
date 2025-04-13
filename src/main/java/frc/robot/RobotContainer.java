@@ -70,10 +70,10 @@ public class RobotContainer {
     private final ElevatorManualUp manualUp = new ElevatorManualUp(elevator);
     private final ElevatorManualDown manualDown = new ElevatorManualDown(elevator);
 
-    private final Limelight cam = new Limelight(sd);
+    private final Limelight cam = new Limelight();
     private final FlightControl flightcont = new FlightControl(3);
 
-    private final AutoAlign autoAlign = new AutoAlign(sd, cam,3);
+    private final AutoAlign autoAlign = new AutoAlign(sd, cam);
 
     private final aligntest atest = new aligntest(cam, sd);
     /*

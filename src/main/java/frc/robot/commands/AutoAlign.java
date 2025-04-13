@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.Optional;
 
+import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj.Timer;
 /**
  * AutoAlign
  */
+
 public class AutoAlign extends Command {
     private final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(
             VisionConstants.TRANSLATE_CONTROLLER.kV_MAX, VisionConstants.TRANSLATE_CONTROLLER.kA_MAX);
@@ -54,20 +56,16 @@ public class AutoAlign extends Command {
             VisionConstants.THETA_CONTROLLER.kD, THETA_CONSTRAINTS);
 
     private static final Transform3d TAG_TO_GOAL = new Transform3d(
-            new Translation3d(VisionConstants.GOAL_X, VisionConstants.GOAL_Y, 0),
+            new Translation3d(VisionConstants.GOAL_X, VisionConstants.GOAL_Y, VisionConstants.GOAL_Z),
             new Rotation3d(0.0, 0.0, Math.PI));
 
     private PhotonTrackedTarget lastTarget;
-
-    private final int TAG;
 
     public AutoAlign(SwerveDrive sd, Limelight limelight) {
         xController.setTolerance(VisionConstants.TRANSLATE_CONTROLLER.TOLERANCE);
         yController.setTolerance(VisionConstants.TRANSLATE_CONTROLLER.TOLERANCE);
         thetaController.setTolerance(VisionConstants.THETA_CONTROLLER.TOLERANCE);
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        TAG = 3;
 
         this.limelight = limelight;
         this.sd = sd;
@@ -127,32 +125,31 @@ public class AutoAlign extends Command {
             }
         }
 
-            if (lastTarget == null) {
-                sd.driveRelative(
-                        new ChassisSpeeds(
-                                0,
-                                0,
-                                0));
-            } else {
-                double xSpeed = xController.calculate(robotPose.getX());
-                if (xController.atGoal())
-                    xSpeed = 0;
+        if (lastTarget == null) {
+            sd.driveRelative(
+                    new ChassisSpeeds(
+                            0,
+                            0,
+                            0));
+        } else {
+            double xSpeed = xController.calculate(robotPose.getX());
+            if (xController.atGoal())
+                xSpeed = 0;
 
-                double ySpeed = yController.calculate(robotPose.getY());
-                if (yController.atGoal())
-                    ySpeed = 0;
+            double ySpeed = yController.calculate(robotPose.getY());
+            if (yController.atGoal())
+                ySpeed = 0;
 
-                double thetaSpeed = thetaController.calculate(robotPose2d.getRotation().getRadians());
-                if (thetaController.atGoal())
-                    thetaSpeed = 0;
+            double thetaSpeed = thetaController.calculate(robotPose2d.getRotation().getRadians());
+            if (thetaController.atGoal())
+                thetaSpeed = 0;
 
-                sd.driveRelative(
-                        new ChassisSpeeds(
-                                xSpeed,
-                                ySpeed,
-                                thetaSpeed));
-            }
-        
+            sd.driveRelative(
+                    new ChassisSpeeds(
+                            xSpeed,
+                            ySpeed,
+                            thetaSpeed));
+        }
 
         updateSD();
     }
