@@ -141,7 +141,7 @@ public class AutoAlign extends Command {
                 ySpeed = 0;
 
             double thetaSpeed = thetaController.calculate(robotPose2d.getRotation().getRadians());
-            if (thetaController.atGoal())
+//            if (thetaController.atGoal())
                 thetaSpeed = 0;
 
             sd.driveRelative(
