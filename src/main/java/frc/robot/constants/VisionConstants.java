@@ -15,18 +15,18 @@ import edu.wpi.first.math.util.Units;
 public class VisionConstants {
 
     public static class TRANSLATE_CONTROLLER {
-        public static final double kP = 1;
+        public static final double kP = 1.80;
         public static final double kI = 0;
         public static final double kD = 0;
 
         public static final double TOLERANCE = 0.02;
 
         public static final double kV_MAX = 4.8;
-        public static final double kA_MAX = 2.0;
+        public static final double kA_MAX = 4.0;
     }
 
     public static class THETA_CONTROLLER {
-        public static final double kP = 1;
+        public static final double kP = 1.0;
         public static final double kI = 0;
         public static final double kD = 0;
 
@@ -35,7 +35,8 @@ public class VisionConstants {
         public static final double kA_MAX = 5.0;
     }
 
-    public static final double GOAL_X = 2.0;
+//    public static final double GOAL_X = Units.inchesToMeters(15 + 3.5);
+    public static final double GOAL_X = 1.0;
     public static final double GOAL_Y = 0;
     public static final double GOAL_Z = 0;
 

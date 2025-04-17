@@ -7,6 +7,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -40,20 +41,20 @@ public class AutoAlign extends Command {
 
     private final SwerveDrive sd;
 
-    private final ProfiledPIDController xController = new ProfiledPIDController(
+    private final PIDController xController = new PIDController(
             VisionConstants.TRANSLATE_CONTROLLER.kP,
             VisionConstants.TRANSLATE_CONTROLLER.kI,
-            VisionConstants.TRANSLATE_CONTROLLER.kD, X_CONSTRAINTS);
+            VisionConstants.TRANSLATE_CONTROLLER.kD);
 
-    private final ProfiledPIDController yController = new ProfiledPIDController(
+    private final PIDController yController = new PIDController(
             VisionConstants.TRANSLATE_CONTROLLER.kP,
             VisionConstants.TRANSLATE_CONTROLLER.kI,
-            VisionConstants.TRANSLATE_CONTROLLER.kD, Y_CONSTRAINTS);
+            VisionConstants.TRANSLATE_CONTROLLER.kD);
 
-    private final ProfiledPIDController thetaController = new ProfiledPIDController(
+    private final PIDController thetaController = new PIDController(
             VisionConstants.THETA_CONTROLLER.kP,
             VisionConstants.THETA_CONTROLLER.kI,
-            VisionConstants.THETA_CONTROLLER.kD, THETA_CONSTRAINTS);
+            VisionConstants.THETA_CONTROLLER.kD);
 
     private static final Transform3d TAG_TO_GOAL = new Transform3d(
             new Translation3d(VisionConstants.GOAL_X, VisionConstants.GOAL_Y, VisionConstants.GOAL_Z),
@@ -77,9 +78,9 @@ public class AutoAlign extends Command {
         lastTarget = null;
         Pose2d robotPose = sd.getPose();
 
-        xController.reset(robotPose.getX());
-        yController.reset(robotPose.getY());
-        thetaController.reset(robotPose.getRotation().getRadians());
+        xController.reset();
+        yController.reset();
+        thetaController.reset();
     }
 
     public void updateSD() {
@@ -119,9 +120,9 @@ public class AutoAlign extends Command {
 
                 Pose2d goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
 
-                xController.setGoal(goalPose.getX());
-                yController.setGoal(goalPose.getY());
-                thetaController.setGoal(goalPose.getRotation().getRadians());
+                xController.setSetpoint(goalPose.getX());
+                yController.setSetpoint(goalPose.getY());
+                thetaController.setSetpoint(goalPose.getRotation().getRadians());
             }
         }
 
@@ -133,15 +134,15 @@ public class AutoAlign extends Command {
                             0));
         } else {
             double xSpeed = xController.calculate(robotPose.getX());
-            if (xController.atGoal())
+            if (xController.atSetpoint())
                 xSpeed = 0;
 
             double ySpeed = yController.calculate(robotPose.getY());
-            if (yController.atGoal())
+            if (yController.atSetpoint())
                 ySpeed = 0;
 
             double thetaSpeed = thetaController.calculate(robotPose2d.getRotation().getRadians());
-//            if (thetaController.atGoal())
+            if (thetaController.atSetpoint())
                 thetaSpeed = 0;
 
             sd.driveRelative(
@@ -151,6 +152,8 @@ public class AutoAlign extends Command {
                             thetaSpeed));
         }
 
+        SmartDashboard.putBoolean("at setpoint", xController.atSetpoint() && yController.atSetpoint() &&
+                thetaController.atSetpoint());
         updateSD();
     }
 
@@ -161,8 +164,7 @@ public class AutoAlign extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
-        // return xController.atGoal() && yController.atGoal() &&
-        // thetaController.atGoal();
+        return xController.atSetpoint() && yController.atSetpoint() &&
+                thetaController.atSetpoint();
     }
 }
