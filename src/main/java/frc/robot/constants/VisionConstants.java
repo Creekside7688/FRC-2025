@@ -15,7 +15,7 @@ import edu.wpi.first.math.util.Units;
 public class VisionConstants {
 
     public static class TRANSLATE_CONTROLLER {
-        public static final double kP = 1.80;
+        public static final double kP = 1.9;
         public static final double kI = 0;
         public static final double kD = 0;
 
@@ -30,7 +30,7 @@ public class VisionConstants {
         public static final double kI = 0;
         public static final double kD = 0;
 
-        public static final double TOLERANCE = Units.degreesToRadians(10.0);
+        public static final double TOLERANCE = Units.degreesToRadians(2.0);
         public static final double kV_MAX = 2 * Math.PI;
         public static final double kA_MAX = 5.0;
     }

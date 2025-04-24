@@ -85,6 +85,7 @@ public class AutoAlign extends Command {
 
     public void updateSD() {
         SmartDashboard.putData("PIDx", xController);
+        SmartDashboard.putNumber("PIDx Set", xController.getSetpoint());
         SmartDashboard.putData("PIDy", yController);
         SmartDashboard.putData("PIDt", thetaController);
 
