@@ -43,11 +43,7 @@ public class RgbLEDs extends SubsystemBase {
 
   }
 
-  @Override
-  public void periodic() { 
-                // This method will be called once per scheduler run
-                led.setData(ledBuffer);
-              }
+ 
 
   public Command runPattern(LEDPattern pattern) {
   return run(() -> pattern.applyTo(ledBuffer));
@@ -59,4 +55,9 @@ public class RgbLEDs extends SubsystemBase {
   white.applyTo(ledBuffer);
   led.setData(ledBuffer);
   }
+  @Override
+  public void periodic() { 
+                // This method will be called once per scheduler run
+                RGBflash();
+              }
   }
