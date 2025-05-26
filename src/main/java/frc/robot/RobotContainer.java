@@ -114,6 +114,8 @@ public class RobotContainer {
     configureOperatorBindings();
     //configureSubsystemCommands();
     configureSwerveDriveCommands();
+
+    //rgbLeds.RgbSolidRed();
   }
 
 
